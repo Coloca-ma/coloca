@@ -35,10 +35,11 @@ export default function Index({ annonces, addresses, success }: Props) {
     useEffect(() => {
         if (success) {
             setShowSuccess(true);
-            const timer = setTimeout(() => setShowSuccess(false), 3000);
+            const timer = setTimeout(() => setShowSuccess(false), 2000);
             return () => clearTimeout(timer); // cleanup
         }
     }, [success]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Annonces" />

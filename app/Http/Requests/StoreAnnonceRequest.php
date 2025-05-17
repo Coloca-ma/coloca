@@ -22,15 +22,15 @@ class StoreAnnonceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'                 => 'required|string|max:50',
-            'description'           => 'required|string',
-            'address.street'        => 'required|string|max:255',
-            'address.city'          => 'required|string|max:50',
-            'address.postal_code'   => 'required|string|max:5',        // match your input!
-            'address.region.id'     => 'required|uuid|exists:regions,id',
-            'loyer'                 => 'required|numeric',
-            'photos'                => 'required|array|min:1',
-            'photos.*'              => 'image|mimes:jpeg,png,jpg|max:2048',
+            "title" => "required|string|max:50",
+            "description" => "required|string",
+            "address.street" => "required|string|max:255",
+            "address.city" => "required|string|max:50",
+            "address.postal_code" => "required|digits:5",
+            "address.region.id" => "required|string|exists:regions,id",
+            "loyer" => "required|numeric",
+            "photos" => "array",
+            "photos.*" => 'image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }
 }

@@ -36,10 +36,6 @@ interface Annonce {
     [key: string]: string | number | Photo[] | Address;
 }
 
-interface Props {
-    annonce: Annonce;
-}
-
 export default function Show({ annonce }: { annonce: Annonce }) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Annonces', href: route('annonces.index') },
@@ -48,6 +44,7 @@ export default function Show({ annonce }: { annonce: Annonce }) {
 
     const [emblaRef] = useEmblaCarousel();
     const photos = annonce.photos;
+    console.log(photos ? 'true' : 'false');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -55,11 +52,17 @@ export default function Show({ annonce }: { annonce: Annonce }) {
                 {/* Carousel */}
                 <div className="overflow-hidden rounded-xl" ref={emblaRef}>
                     <div className="flex">
-                        {photos.map((photo, index) => (
-                            <div className="h-[400px] w-full flex-shrink-0 bg-gray-200" key={index}>
-                                <img src={`/storage/${photo.path}`} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
+                        {photos.length > 0 ? (
+                            photos.map((photo, index) => (
+                                <div className="h-[400px] w-full flex-shrink-0 bg-gray-200" key={index}>
+                                    <img src={`/storage/${photo.path}`} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="flex h-[400px] w-full items-center justify-between bg-gray-200 text-center text-3xl font-bold text-black">
+                                <p className="w-full">No images to preview</p>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
 
