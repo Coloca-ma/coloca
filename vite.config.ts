@@ -22,4 +22,13 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
+    // server: {
+    //     host: '0.0.0.0',
+    //     port: 5173,
+    //     hmr: {
+    //         protocol: 'ws',
+    //         host: '192.168.137.1', // ✅ your real IP
+    //         port: 5173,
+    //     },
+    // },
 });

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('annonce_id');
             $table->foreign('annonce_id')->references('id')->on('annonces')->onDelete('cascade');
-            $table->binary('img');
+            $table->string('path');
             $table->timestamps();
         });
     }
