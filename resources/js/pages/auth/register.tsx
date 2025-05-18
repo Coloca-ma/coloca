@@ -7,10 +7,14 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
-    name: string;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    role: 'colocataire' | 'proprietaire';
     email: string;
     password: string;
     password_confirmation: string;
@@ -18,7 +22,10 @@ type RegisterForm = {
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
+        first_name: '',
+        last_name: '',
+        phone: '',
+        role: 'colocataire',
         email: '',
         password: '',
         password_confirmation: '',
@@ -27,30 +34,77 @@ export default function Register() {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () => {
+                reset('password', 'password_confirmation');
+                console.log('Registration complete');
+            },
+            onError: (errors) => {
+                console.error('Registration errors:', errors);
+            },
         });
     };
 
     return (
-        <AuthLayout title="Create an account" description="Enter your details below to create your account">
+        <AuthLayout title="Create your Coloca account" description="Enter your details to join our community">
             <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="first_name">First Name</Label>
+                            <Input
+                                id="first_name"
+                                value={data.first_name}
+                                onChange={(e) => setData('first_name', e.target.value)}
+                                required
+                                autoFocus
+                                disabled={processing}
+                            />
+                            <InputError message={errors.first_name} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="last_name">Last Name</Label>
+                            <Input
+                                id="last_name"
+                                value={data.last_name}
+                                onChange={(e) => setData('last_name', e.target.value)}
+                                required
+                                disabled={processing}
+                            />
+                            <InputError message={errors.last_name} />
+                        </div>
+                    </div>
+
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="phone">Phone Number</Label>
                         <Input
-                            id="name"
-                            type="text"
+                            id="phone"
+                            type="tel"
+                            value={data.phone}
+                            onChange={(e) => setData('phone', e.target.value)}
                             required
-                            autoFocus
-                            tabIndex={1}
-                            autoComplete="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
                             disabled={processing}
-                            placeholder="Full name"
                         />
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError message={errors.phone} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="role">I am a</Label>
+                        <Select
+                            value={data.role}
+                            onValueChange={(value: 'colocataire' | 'proprietaire') => setData('role', value)}
+                            disabled={processing}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select your role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="colocataire">Tenant (Colocataire)</SelectItem>
+                                <SelectItem value="proprietaire">Owner (Propriétaire)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.role} />
                     </div>
 
                     <div className="grid gap-2">
@@ -59,7 +113,6 @@ export default function Register() {
                             id="email"
                             type="email"
                             required
-                            tabIndex={2}
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
@@ -75,7 +128,6 @@ export default function Register() {
                             id="password"
                             type="password"
                             required
-                            tabIndex={3}
                             autoComplete="new-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
@@ -91,7 +143,6 @@ export default function Register() {
                             id="password_confirmation"
                             type="password"
                             required
-                            tabIndex={4}
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}
@@ -101,17 +152,14 @@ export default function Register() {
                         <InputError message={errors.password_confirmation} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    <Button type="submit" className="mt-2 w-full" disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </Button>
                 </div>
 
                 <div className="text-muted-foreground text-center text-sm">
-                    Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
-                        Log in
-                    </TextLink>
+                    Already have an account? <TextLink href={route('login')}>Log in</TextLink>
                 </div>
             </form>
         </AuthLayout>

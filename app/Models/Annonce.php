@@ -15,12 +15,12 @@ class Annonce extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $fillable = ['titre', 'description', 'addressed_id', 'loyer'];
+    protected $fillable = ['titre', 'description', 'address_id', 'loyer'];
 
     // Un annonce appartient à une adresse
     public function address()
     {
-        return $this->belongsTo(Address::class, 'addressed_id');
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
     // Un annonce a plusieurs photos

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('titre');
             $table->text('description');
-            $table->uuid('addressed_id');
-            $table->foreign('addressed_id')->references('id')->on('addresses');
+            $table->uuid('address_id');
+            $table->foreign('address_id')->references('id')->on('addresses');
             $table->float('loyer');
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // deleted_at

@@ -28,13 +28,19 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         remember: false,
     });
 
+    // const submit: FormEventHandler = (e) => {
+    //     e.preventDefault();
+    //     post(route('login'), {
+    //         onFinish: () => reset('password'),
+    //     });
+    // };
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'), {
             onFinish: () => reset('password'),
+            preserveState: true, // Add this to preserve form state
         });
     };
-
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
             <Head title="Log in" />

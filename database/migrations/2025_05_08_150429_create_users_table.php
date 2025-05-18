@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
-            $table->uuid('addressed_id')->nullable();
-            $table->foreign('addressed_id')->references('id')->on('addresses');
+            // $table->uuid('address_id')->nullable();
+            // $table->foreign('address_id')->references('id')->on('addresses');
             $table->enum('role', ['admin', 'colocataire', 'proprietaire']);
             $table->string('email')->unique();
             $table->string('password');

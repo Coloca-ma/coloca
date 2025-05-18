@@ -24,7 +24,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['first_name', 'last_name', 'phone', 'addressed_id', 'role', 'email', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'role', 'email', 'password'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,11 +49,11 @@ class User extends Authenticatable
         ];
     }
 
-    // Un user appartient à une adresse
-    public function address()
-    {
-        return $this->belongsTo(Address::class, 'addressed_id');
-    }
+    // // Un user appartient à une adresse
+    // public function address()
+    // {
+    //     return $this->belongsTo(Address::class, 'address_id');
+    // }
 
     // Un user a plusieurs avis
     public function avis()
