@@ -14,49 +14,69 @@ class UserAdminController extends Controller
     /**
      * Display a listing of users.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        // $users = User::orderBy('created_at', 'desc')->paginate(10);
+
+        // return Inertia::render('users/index', [
+        //     'users' => $users
+        // ]);
+
+        $users = User::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                      ->orWhere('last_name', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->input('role'), function ($query, $role) {
+                $query->where('role', $role);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('users/index', [
-            'users' => $users
+            'users' => $users,
+            'filters' => $request->only(['search', 'role'])
         ]);
+        
     }
 
     /**
      * Show the form for creating a new user.
      */
-    public function create()
-    {
-        return Inertia::render('users/create');
-    }
+    // public function create()
+    // {
+    //     return Inertia::render('users/create');
+    // }
 
     /**
      * Store a newly created user in database.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20',
-            'role' => 'required|in:admin,colocataire,proprietaire',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'first_name' => 'required|string|max:255',
+    //         'last_name' => 'required|string|max:255',
+    //         'email' => 'required|string|email|max:255|unique:users',
+    //         'phone' => 'required|string|max:20',
+    //         'role' => 'required|in:admin,colocataire,proprietaire',
+    //         'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    //     ]);
 
-        User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
+    //     User::create([
+    //         'first_name' => $request->first_name,
+    //         'last_name' => $request->last_name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'role' => $request->role,
+    //         'password' => Hash::make($request->password),
+    //     ]);
 
-        return redirect()->route('users.index')->with('success', 'User created.');
+    //     return redirect()->route('users.index')->with('success', 'User created.');
 
-    }
+    // }
 
     /**
      * Display the specified user.

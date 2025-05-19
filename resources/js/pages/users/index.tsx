@@ -1,17 +1,18 @@
-import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { PencilIcon, TrashIcon, EyeIcon, PlusIcon } from 'lucide-react';
-// import { Pagination } from '@/components/ui/pagination';
+import { Head, Link, router } from '@inertiajs/react';
+import { EyeIcon, PencilIcon, SearchIcon, TrashIcon } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Users',
         href: '/users',
-    }
+    },
 ];
 
 interface User {
@@ -20,7 +21,7 @@ interface User {
     last_name: string;
     email: string;
     phone: string;
-    role: 'admin' | 'tenant' | 'owner';
+    role: 'admin' | 'colocataire' | 'proprietaire';
     created_at: string;
 }
 
@@ -33,31 +34,102 @@ interface Props {
             active: boolean;
         }>;
     };
+    filters: {
+        search?: string;
+        role?: string;
+    };
 }
 
-export default function UserIndex({ users }: Props) {
+export default function UserIndex({ users, filters }: Props) {
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const search = (form.elements.namedItem('search') as HTMLInputElement).value;
+
+        router.get(
+            route('users.index'),
+            {
+                search,
+                role: filters.role,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
+
+    const resetFilters = () => {
+        router.get(
+            route('users.index'),
+            {},
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
+
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="User Management" />
-            
+
             <div className="space-y-6 p-6">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold">User Management</h1>
-                        <p className="text-sm text-muted-foreground">
-                            Manage all registered users in the system
-                        </p>
+                        <p className="text-muted-foreground text-sm">Manage all registered users in the system</p>
                     </div>
-                    <Link href={route('users.create')}>
+                    {/* <Link href={route('users.create')}>
                         <Button>
                             <PlusIcon className="mr-2 h-4 w-4" />
                             Add New User
                         </Button>
-                    </Link>
+                    </Link> */}
                 </div>
 
-                <div className="border rounded-lg overflow-hidden">
-                    <Table className="w-full">
+                <div className="space-y-4 rounded-lg border p-4">
+                    <form onSubmit={handleSearch} className="flex gap-4">
+                        <div className="relative flex-1">
+                            <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                            <Input name="search" placeholder="Search by name..." className="pl-10" defaultValue={filters.search} />
+                        </div>
+                        <Select
+                            name="role"
+                            value={filters.role || undefined}
+                            onValueChange={(value) => {
+                                router.get(
+                                    route('users.index'),
+                                    {
+                                        ...filters,
+                                        role: value || undefined,
+                                    },
+                                    {
+                                        preserveState: true,
+                                        replace: true,
+                                    },
+                                );
+                            }}
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Filter by role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="colocataire">Colocataire</SelectItem>
+                                <SelectItem value="proprietaire">Proprietaire</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Button type="submit">Filter</Button>
+                        {(filters.search || filters.role) && (
+                            <Button variant="outline" onClick={resetFilters}>
+                                Reset
+                            </Button>
+                        )}
+                    </form>
+
+                    <Table>
                         <TableHeader className="bg-gray-50 dark:bg-gray-800">
                             <TableRow>
                                 <TableHead className="px-6 py-3">Full Name</TableHead>
@@ -77,19 +149,14 @@ export default function UserIndex({ users }: Props) {
                                     <TableCell className="px-6 py-4">{user.email}</TableCell>
                                     <TableCell className="px-6 py-4">{user.phone}</TableCell>
                                     <TableCell className="px-6 py-4">
-                                        <Badge 
-                                            variant={
-                                                user.role === 'admin' ? 'destructive' :
-                                                user.role === 'owner' ? 'default' : 'secondary'
-                                            }
+                                        <Badge
+                                            variant={user.role === 'admin' ? 'destructive' : user.role === 'proprietaire' ? 'default' : 'secondary'}
                                         >
                                             {user.role}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="px-6 py-4">
-                                        {new Date(user.created_at).toLocaleDateString()}
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 flex justify-end gap-2">
+                                    <TableCell className="px-6 py-4">{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                                    <TableCell className="flex justify-end gap-2 px-6 py-4">
                                         <Link href={route('users.show', user.id)}>
                                             <Button variant="outline" size="icon" title="View">
                                                 <EyeIcon className="h-4 w-4" />
@@ -119,9 +186,7 @@ export default function UserIndex({ users }: Props) {
                     </Table>
                 </div>
 
-                <div className="py-4">
-                    {/* <Pagination links={users.links} /> */}
-                </div>
+                <div className="py-4">{/* <Pagination links={users.links} /> */}</div>
             </div>
         </AppLayout>
     );
