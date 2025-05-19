@@ -58,7 +58,7 @@ export default function UserIndex({ users }: Props) {
 
                 <div className="border rounded-lg overflow-hidden">
                     <Table className="w-full">
-                        <TableHeader className="bg-gray-50 dark:bg-gray-800">
+                        <TableHeader className="bg-gray-50">
                             <TableRow>
                                 <TableHead className="px-6 py-3">Full Name</TableHead>
                                 <TableHead className="px-6 py-3">Email</TableHead>
@@ -70,7 +70,7 @@ export default function UserIndex({ users }: Props) {
                         </TableHeader>
                         <TableBody>
                             {users.data.map((user) => (
-                                <TableRow key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                                <TableRow key={user.id} className="hover:bg-gray-50">
                                     <TableCell className="px-6 py-4 font-medium">
                                         {user.first_name} {user.last_name}
                                     </TableCell>

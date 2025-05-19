@@ -1,31 +1,14 @@
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
+import GuestLayout from '@/Layouts/GuestLayout';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import AuthLayout from '@/layouts/auth-layout';
-
-type RegisterForm = {
-    first_name: string;
-    last_name: string;
-    phone: string;
-    role: 'colocataire' | 'proprietaire';
-    email: string;
-    password: string;
-    password_confirmation: string;
-};
-
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        first_name: '',
-        last_name: '',
-        phone: '',
-        role: 'colocataire',
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -33,135 +16,106 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
         post(route('register'), {
-            onFinish: () => {
-                reset('password', 'password_confirmation');
-                console.log('Registration complete');
-            },
-            onError: (errors) => {
-                console.error('Registration errors:', errors);
-            },
+            onFinish: () => reset('password', 'password_confirmation'),
         });
     };
 
     return (
-        <AuthLayout title="Create your Coloca account" description="Enter your details to join our community">
+        <GuestLayout>
             <Head title="Register" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
-                <div className="grid gap-6">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="first_name">First Name</Label>
-                            <Input
-                                id="first_name"
-                                value={data.first_name}
-                                onChange={(e) => setData('first_name', e.target.value)}
-                                required
-                                autoFocus
-                                disabled={processing}
-                            />
-                            <InputError message={errors.first_name} />
-                        </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="last_name">Last Name</Label>
-                            <Input
-                                id="last_name"
-                                value={data.last_name}
-                                onChange={(e) => setData('last_name', e.target.value)}
-                                required
-                                disabled={processing}
-                            />
-                            <InputError message={errors.last_name} />
-                        </div>
-                    </div>
+            <form onSubmit={submit}>
+                <div>
+                    <InputLabel htmlFor="name" value="Name" />
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="phone">Phone Number</Label>
-                        <Input
-                            id="phone"
-                            type="tel"
-                            value={data.phone}
-                            onChange={(e) => setData('phone', e.target.value)}
-                            required
-                            disabled={processing}
-                        />
-                        <InputError message={errors.phone} />
-                    </div>
+                    <TextInput
+                        id="name"
+                        name="name"
+                        value={data.name}
+                        className="mt-1 block w-full"
+                        autoComplete="name"
+                        isFocused={true}
+                        onChange={(e) => setData('name', e.target.value)}
+                        required
+                    />
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="role">I am a</Label>
-                        <Select
-                            value={data.role}
-                            onValueChange={(value: 'colocataire' | 'proprietaire') => setData('role', value)}
-                            disabled={processing}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select your role" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="colocataire">Tenant (Colocataire)</SelectItem>
-                                <SelectItem value="proprietaire">Owner (Propriétaire)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <InputError message={errors.role} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            required
-                            autoComplete="email"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            disabled={processing}
-                            placeholder="email@example.com"
-                        />
-                        <InputError message={errors.email} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            required
-                            autoComplete="new-password"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            disabled={processing}
-                            placeholder="Password"
-                        />
-                        <InputError message={errors.password} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">Confirm password</Label>
-                        <Input
-                            id="password_confirmation"
-                            type="password"
-                            required
-                            autoComplete="new-password"
-                            value={data.password_confirmation}
-                            onChange={(e) => setData('password_confirmation', e.target.value)}
-                            disabled={processing}
-                            placeholder="Confirm password"
-                        />
-                        <InputError message={errors.password_confirmation} />
-                    </div>
-
-                    <Button type="submit" className="mt-2 w-full" disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Create account
-                    </Button>
+                    <InputError message={errors.name} className="mt-2" />
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Already have an account? <TextLink href={route('login')}>Log in</TextLink>
+                <div className="mt-4">
+                    <InputLabel htmlFor="email" value="Email" />
+
+                    <TextInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={data.email}
+                        className="mt-1 block w-full"
+                        autoComplete="username"
+                        onChange={(e) => setData('email', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.email} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="password" value="Password" />
+
+                    <TextInput
+                        id="password"
+                        type="password"
+                        name="password"
+                        value={data.password}
+                        className="mt-1 block w-full"
+                        autoComplete="new-password"
+                        onChange={(e) => setData('password', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.password} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel
+                        htmlFor="password_confirmation"
+                        value="Confirm Password"
+                    />
+
+                    <TextInput
+                        id="password_confirmation"
+                        type="password"
+                        name="password_confirmation"
+                        value={data.password_confirmation}
+                        className="mt-1 block w-full"
+                        autoComplete="new-password"
+                        onChange={(e) =>
+                            setData('password_confirmation', e.target.value)
+                        }
+                        required
+                    />
+
+                    <InputError
+                        message={errors.password_confirmation}
+                        className="mt-2"
+                    />
+                </div>
+
+                <div className="mt-4 flex items-center justify-end">
+                    <Link
+                        href={route('login')}
+                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Already registered?
+                    </Link>
+
+                    <PrimaryButton className="ms-4" disabled={processing}>
+                        Register
+                    </PrimaryButton>
                 </div>
             </form>
-        </AuthLayout>
+        </GuestLayout>
     );
 }
