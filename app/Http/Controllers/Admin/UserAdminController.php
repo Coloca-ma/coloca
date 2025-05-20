@@ -26,7 +26,7 @@ class UserAdminController extends Controller
             ->when($request->input('search'), function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('first_name', 'like', "%{$search}%")
-                      ->orWhere('last_name', 'like', "%{$search}%");
+                        ->orWhere('last_name', 'like', "%{$search}%");
                 });
             })
             ->when($request->input('role'), function ($query, $role) {
@@ -40,7 +40,6 @@ class UserAdminController extends Controller
             'users' => $users,
             'filters' => $request->only(['search', 'role'])
         ]);
-        
     }
 
     /**
@@ -107,22 +106,23 @@ class UserAdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // dd($request);
         $user = User::findOrFail($id);
 
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'required|string|max:20',
             'role' => 'required|in:admin,colocataire,proprietaire',
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $data = $request->only([
-            'first_name', 
-            'last_name', 
-            'email', 
-            'phone', 
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
             'role'
         ]);
 
@@ -133,7 +133,6 @@ class UserAdminController extends Controller
         $user->update($data);
 
         return redirect()->route('users.index')->with('success', 'User updated.');
-
     }
 
     /**

@@ -14,7 +14,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-Route::resource('users', UserAdminController::class);
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::resource('users', UserAdminController::class);
+});
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
