@@ -2,9 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
 {
-    //
+    use HasFactory, HasUuids;
+
+    protected $fillable = ['annonce_id', "path"];
+
+    public function annonce()
+    {
+        return $this->belongsTo(Annonce::class);
+    }
 }

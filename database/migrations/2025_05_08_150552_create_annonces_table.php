@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('annonces', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('titre');
+            $table->string('title');
             $table->text('description');
             $table->uuid('address_id');
-            $table->foreign('address_id')->references('id')->on('addresses');
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
             $table->float('loyer');
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // deleted_at

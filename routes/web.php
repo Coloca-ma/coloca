@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\UserAdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Proprietaire\AnnonceController;
+
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -16,7 +18,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('users', UserAdminController::class);
+    Route::prefix('proprietaire')->group(function () {
+        Route::resource('annonces', AnnonceController::class);
+    });
 });
+
+
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
