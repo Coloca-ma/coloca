@@ -2,47 +2,70 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { LayoutGrid, User, Users } from 'lucide-react';
 import AppLogo from './app-logo';
+import type { SharedData } from '@/types'; // ajuste le chemin si nécessaire
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Admin',
-        href: '/users',
-        icon: Users,
-    },
-    {
-        title: 'Proprietaire',
-        href: '/proprietaire/annonces',
-        icon: User,
-    },
-    {
-        title: 'Colocataire',
-        href: '/colocataire',
-        icon: User,
-    },
-];
 
-// const footerNavItems: NavItem[] = [
-//     {
-//         title: 'Repository',
-//         href: 'https://github.com/laravel/react-starter-kit',
-//         icon: Folder,
-//     },
-//     {
-//         title: 'Documentation',
-//         href: 'https://laravel.com/docs/starter-kits#react',
-//         icon: BookOpen,
-//     },
-// ];
+export const AppSidebar = () => {
+    const { auth } = usePage<SharedData>().props;
+    const userRole = auth.user?.role;
+    console.log('User Role:', userRole); // Debugging line to check the user role
+    console.log('Auth:', auth); // Debugging line to check the auth object
 
-export function AppSidebar() {
+    const adminNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Utilisateurs',
+            href: '/users',
+            icon: Users,
+        }
+    ];
+
+    const proprietaireNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Mes annonces',
+            href: '/proprietaire/annonces',
+            icon: User,
+        }
+    ];
+
+    const colocataireNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Recherche',
+            href: '/colocataire',
+            icon: User,
+        }
+    ];
+
+    const getNavItems = () => {
+        switch(userRole) {
+            case 'admin':
+                return adminNavItems;
+            case 'proprietaire':
+                return proprietaireNavItems;
+            case 'colocataire':
+                return colocataireNavItems;
+            default:
+                return [];
+        }
+    };
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -58,13 +81,12 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={getNavItems()} />
             </SidebarContent>
 
             <SidebarFooter>
-                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
     );
-}
+};

@@ -9,8 +9,18 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
+
+/**
+ * @method void middleware(string|array $middleware, array $options = [])
+ */
 class UserAdminController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    //     $this->middleware('role:admin');
+    // }
     /**
      * Display a listing of users.
      */

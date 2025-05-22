@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'id' => Str::uuid(),
-            'first_name' => 'Youssef',
+            'first_name' => 'Youssef' ,
             'last_name' => 'Bendahmad',
             'phone' => '0600000001',
             'role' => 'admin',
