@@ -28,89 +28,137 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         remember: false,
     });
 
-    // const submit: FormEventHandler = (e) => {
-    //     e.preventDefault();
-    //     post(route('login'), {
-    //         onFinish: () => reset('password'),
-    //     });
-    // };
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'), {
             onFinish: () => reset('password'),
-            preserveState: true, // Add this to preserve form state
+            preserveState: true,
         });
     };
+
     return (
-        <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
+        <div>
             <Head title="Log in" />
-
-            <form className="flex flex-col gap-6" onSubmit={submit}>
-                <div className="grid gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            required
-                            autoFocus
-                            tabIndex={1}
-                            autoComplete="email"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            placeholder="email@example.com"
-                        />
-                        <InputError message={errors.email} />
+            <div className="mx-auto w-full max-w-md px-4 py-12">
+                <div className="mb-10 text-center">
+                    <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-teal-500 shadow-lg">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="text-white"
+                        >
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
                     </div>
+                    <h1 className="mb-3 text-3xl font-bold text-gray-900 dark:text-white">
+                        Welcome to <span className="bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent">COLOCA</span>
+                    </h1>
+                    <p className="text-lg text-gray-600 dark:text-gray-300">
+                        Sign in to your account
+                    </p>
+                </div>
 
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
-                                    Forgot password?
-                                </TextLink>
-                            )}
+                {status && (
+                    <div className="mb-6 rounded-lg bg-green-50 p-4 text-center text-green-700 dark:bg-green-900/20 dark:text-green-300">
+                        {status}
+                    </div>
+                )}
+
+                <form className="space-y-5 rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-800/50 dark:shadow-gray-700/30" onSubmit={submit}>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+                                Email Address *
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                required
+                                autoFocus
+                                autoComplete="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="your@email.com"
+                                disabled={processing}
+                            />
+                            <InputError message={errors.email} />
                         </div>
-                        <Input
-                            id="password"
-                            type="password"
-                            required
-                            tabIndex={2}
-                            autoComplete="current-password"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Password"
-                        />
-                        <InputError message={errors.password} />
+
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">
+                                    Password *
+                                </Label>
+                                {canResetPassword && (
+                                    <TextLink 
+                                        href={route('password.request')} 
+                                        className="text-sm text-green-600 hover:text-green-700 dark:text-teal-400 dark:hover:text-teal-300"
+                                    >
+                                        Forgot password?
+                                    </TextLink>
+                                )}
+                            </div>
+                            <Input
+                                id="password"
+                                type="password"
+                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                required
+                                autoComplete="current-password"
+                                value={data.password}
+                                onChange={(e) => setData('password', e.target.value)}
+                                placeholder="••••••••"
+                                disabled={processing}
+                            />
+                            <InputError message={errors.password} />
+                        </div>
+
+                        <div className="flex items-center space-x-3">
+                            <Checkbox
+                                id="remember"
+                                name="remember"
+                                checked={data.remember}
+                                onClick={() => setData('remember', !data.remember)}
+                                disabled={processing}
+                                className="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-teal-500"
+                            />
+                            <Label htmlFor="remember" className="text-gray-700 dark:text-gray-300">
+                                Remember me
+                            </Label>
+                        </div>
+
+                        <Button 
+                            type="submit" 
+                            className="mt-6 w-full bg-gradient-to-r from-green-600 to-teal-600 py-6 text-lg font-medium text-white shadow-lg hover:from-green-700 hover:to-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 dark:ring-offset-gray-800" 
+                            disabled={processing}
+                        >
+                            {processing ? (
+                                <LoaderCircle className="h-5 w-5 animate-spin" />
+                            ) : (
+                                "Sign In"
+                            )}
+                        </Button>
                     </div>
 
-                    <div className="flex items-center space-x-3">
-                        <Checkbox
-                            id="remember"
-                            name="remember"
-                            checked={data.remember}
-                            onClick={() => setData('remember', !data.remember)}
-                            tabIndex={3}
-                        />
-                        <Label htmlFor="remember">Remember me</Label>
+                    <div className="pt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                        Don't have an account?{' '}
+                        <TextLink 
+                            href={route('register')} 
+                            className="font-medium text-green-600 hover:text-green-700 dark:text-teal-400 dark:hover:text-teal-300"
+                        >
+                            Create one
+                        </TextLink>
                     </div>
-
-                    <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Log in
-                    </Button>
-                </div>
-
-                <div className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
-                        Sign up
-                    </TextLink>
-                </div>
-            </form>
-
-            {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
-        </AuthLayout>
+                </form>
+            </div>
+        </div>
     );
 }
