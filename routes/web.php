@@ -32,6 +32,7 @@
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Proprietaire\AnnonceController;
 use App\Http\Controllers\Colocataire\ColocataireController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
