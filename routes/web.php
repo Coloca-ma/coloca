@@ -45,18 +45,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    // Routes admin
-    Route::middleware(['role:admin'])->group(function () {
+    // Admin routes
+    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+        // Route::get('dashboard', function () {
+        //     return Inertia::render('admin/dashboard'); 
+        // })->name('admin.dashboard');
+
+        Route::inertia('/dashboard', 'admin/dashboard')->name('admin.dashboard');
+
         Route::resource('users', UserAdminController::class);
     });
 
     // Routes proprietaire
     Route::middleware(['role:proprietaire'])->prefix('proprietaire')->group(function () {
+        Route::inertia('/dashboard', 'proprietaire/dashboard')->name('proprietaire.dashboard');
         Route::resource('annonces', AnnonceController::class);
     });
 
     // Routes colocataire
     Route::middleware(['role:colocataire'])->prefix('colocataire')->group(function () {
+        Route::inertia('/dashboard', 'colocataire/dashboard')->name('colocataire.dashboard');
         // Route::get('/', [ColocataireController::class, 'index'])->name('colocataire.index');
         // Ajoutez d'autres routes colocataire ici
     });

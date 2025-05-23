@@ -46,7 +46,7 @@ class UserAdminController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('users/index', [
+        return Inertia::render('admin/users/index', [
             'users' => $users,
             'filters' => $request->only(['search', 'role'])
         ]);
@@ -94,7 +94,7 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        return Inertia::render('users/show', [
+        return Inertia::render('admin/users/show', [
             'user' => $user
         ]);
     }
@@ -106,7 +106,7 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        return Inertia::render('users/edit', [
+        return Inertia::render('admin/users/edit', [
             'user' => $user
         ]);
     }

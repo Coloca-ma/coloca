@@ -3,7 +3,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, User, Users } from 'lucide-react';
+import { LayoutGrid, User, Users ,Home,Search} from 'lucide-react';
 import AppLogo from './app-logo';
 import type { SharedData } from '@/types'; // ajuste le chemin si nécessaire
 
@@ -17,12 +17,12 @@ export const AppSidebar = () => {
     const adminNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: '/admin/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Utilisateurs',
-            href: '/users',
+            title: 'Users',
+            href: '/admin/users',
             icon: Users,
         }
     ];
@@ -30,26 +30,26 @@ export const AppSidebar = () => {
     const proprietaireNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: '/proprietaire/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Mes annonces',
+            title: 'My Listings',
             href: '/proprietaire/annonces',
-            icon: User,
+            icon: Home,
         }
     ];
 
     const colocataireNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: 'colocataire/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Recherche',
-            href: '/colocataire',
-            icon: User,
+            title: 'Search',
+            href: 'colocataire/annonces',
+            icon: Search,
         }
     ];
 
