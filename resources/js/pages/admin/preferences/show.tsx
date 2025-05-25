@@ -25,11 +25,11 @@ interface Props {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Preferences',
-        href: '/preferences',
+        href: '/admin/preferences',
     },
     {
         title: 'Preference Details',
-        href: '/preferences/create',
+        href: '/admin/preferences/create',
     },
 ];
 

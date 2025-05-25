@@ -17,11 +17,11 @@ interface Props {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Equipements',
-        href: '/equipements',
+        href: '/admin/equipements',
     },
     {
         title: 'Equipements Details',
-        href: '/equipements/create',
+        href: '/admin/equipements/create',
     },
 ];
 

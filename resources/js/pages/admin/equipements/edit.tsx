@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/react';
 import EquipementForm from './form';
 
 const breadcrumbs = [
-    { title: 'Equipements', href: '/equipements' },
+    { title: 'Equipements', href: '/admin/equipements' },
     { title: 'Edit Equipement', href: '#' },
 ];
 

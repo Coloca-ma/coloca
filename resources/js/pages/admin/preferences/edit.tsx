@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/react';
 import PreferenceForm, { type PreferenceValue } from './form';
 
 const breadcrumbs = [
-    { title: 'Preferences', href: '/preferences' },
+    { title: 'Preferences', href: '/admin/preferences' },
     { title: 'Edit Preference', href: '#' },
 ];
 

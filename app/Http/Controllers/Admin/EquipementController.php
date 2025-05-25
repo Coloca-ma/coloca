@@ -12,10 +12,18 @@ class EquipementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $equipements = Equipement::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('admin/equipements/index', [
-            "equipements" => Equipement::all()
+            "equipements" => $equipements,
+            "filters" => $request->only(['search'])
         ]);
     }
 

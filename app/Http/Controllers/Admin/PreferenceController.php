@@ -14,11 +14,18 @@ class PreferenceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $preferences = Preference::with('preferenceValues')->get();
+        $preferences = Preference::with('preferenceValues')
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('admin/preferences/index', [
-            "preferences" => $preferences
+            "preferences" => $preferences,
+            "filters" => $request->only(['search'])
         ]);
     }
 
