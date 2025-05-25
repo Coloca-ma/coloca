@@ -39,4 +39,9 @@ class Annonce extends Model
     {
         return $this->hasMany(AnnoncePreferenceValue::class);
     }
+
+    public function equipements()
+    {
+        return $this->hasMany(Equipement::class);
+    }
 }

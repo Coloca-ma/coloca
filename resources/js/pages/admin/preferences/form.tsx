@@ -82,7 +82,7 @@ export default function PreferenceForm({ data, setData, errors, processing, onSu
 
                     <div className="mt-3 flex flex-wrap gap-2">
                         {data.preference_values.map((option) => (
-                            <div key={option.id} className="flex items-center gap-1 rounded-full bg-gray-200 px-3 py-1 text-sm">
+                            <div key={option.id} className="flex items-center gap-1 rounded-full bg-gray-200 px-3 py-1 text-sm text-black">
                                 {option.value}
                                 <button type="button" onClick={() => handleRemoveOption(option.id)} className="text-gray-500 hover:text-red-500">
                                     <X size={14} />

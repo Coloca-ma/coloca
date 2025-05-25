@@ -28,6 +28,7 @@
 // require __DIR__ . '/settings.php';
 // require __DIR__ . '/auth.php';
 
+use App\Http\Controllers\Admin\EquipementController;
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Proprietaire\AnnonceController;
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('users', UserAdminController::class);
         Route::resource('preferences', PreferenceController::class);
+        Route::resource('equipements', EquipementController::class);
     });
 
     // Routes proprietaire

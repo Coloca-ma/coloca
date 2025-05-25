@@ -1,17 +1,16 @@
-// pages/preferences/create.tsx
+// pages/equipements/create.tsx
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
-import PreferenceForm, { type PreferenceValue } from './form';
+import PreferenceForm from './form';
 
 const breadcrumbs = [
-    { title: 'Preferences', href: '/preferences' },
-    { title: 'Create Preference', href: '/preferences/create' },
+    { title: 'Equipements', href: '/equipements' },
+    { title: 'Create Equipements', href: '/equipements/create' },
 ];
 
 export default function PreferenceCreate() {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
-        preference_values: [] as PreferenceValue[],
     });
 
     // useEffect(() => {
@@ -20,7 +19,7 @@ export default function PreferenceCreate() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('preferences.store'));
+        post(route('equipements.store'));
     };
 
     return (

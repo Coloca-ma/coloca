@@ -35,10 +35,8 @@ class PreferenceController extends Controller
      */
     public function store(Request $req)
     {
-
-        // dd($req);
         $validated = $req->validate([
-            "name" => "required|string|min:2",
+            "name" => "required|string|min:2|unique:preferences,name",
             "preference_values" => "required|array",
             "preference_values.*.value" => "required|string|min:2"
         ], [
@@ -82,7 +80,6 @@ class PreferenceController extends Controller
      */
     public function edit(Preference $preference)
     {
-        Log::info($preference->load(['preferenceValues']));
         return Inertia::render('admin/preferences/edit', [
             'preference' => $preference->load(['preferenceValues'])
         ]);
@@ -95,7 +92,7 @@ class PreferenceController extends Controller
     {
         // Log::info($req);
         $validated = $req->validate([
-            "name" => "required|string|min:2",
+            'name' => "required|string|min:2|unique:preferences,name,{$preference->id}",
             "preference_values" => "required|array",
             "preference_values.*.value" => "required|string|min:2"
         ], [

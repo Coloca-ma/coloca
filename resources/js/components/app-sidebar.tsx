@@ -29,6 +29,11 @@ export const AppSidebar = () => {
             href: '/preferences',
             icon: Users,
         },
+        {
+            title: 'Equipements',
+            href: '/equipements',
+            icon: Users,
+        },
     ];
 
     const proprietaireNavItems: NavItem[] = [
