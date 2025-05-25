@@ -9,7 +9,7 @@ use \Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Models\Address;
 use App\Models\Photo;
 use App\Models\Avis;
-use App\Models\PreferenceType;
+use App\Models\AnnoncePreferenceValue;
 
 class Annonce extends Model
 {
@@ -35,9 +35,8 @@ class Annonce extends Model
         return $this->hasMany(Avis::class);
     }
 
-    // Un annonce a plusieurs preference types
-    public function preferenceTypes()
+    public function annoncePreferenceValues()
     {
-        return $this->hasMany(PreferenceType::class);
+        return $this->hasMany(AnnoncePreferenceValue::class);
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,14 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('preference_types', function (Blueprint $table) {
+        Schema::create('preference_options', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('preference_id');
-            $table->foreign('preference_id')->references('id')->on('preferences');
-            $table->uuid('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->uuid('annonce_id');
-            $table->foreign('annonce_id')->references('id')->on('annonces');
+            $table->foreign('preference_id')->references('id')->on('preferences')->onDelete('cascade');
+            $table->string('value');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('preference_types');
+        Schema::dropIfExists('preference_options');
     }
 };

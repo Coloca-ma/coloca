@@ -3,19 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use App\Models\PreferenceType;
+use App\Models\PreferenceOption;
+use \Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Preference extends Model
 {
-    use HasFactory, HasUuids;
+    use HasUuids;
 
-    protected $fillable = ['key'];
+    protected $fillable = ['name'];
 
-    // un preference a plusieurs types de preference
-    public function preferenceTypes()
+    public function preferenceValues()
     {
-        return $this->hasMany(PreferenceType::class);
+        return $this->hasMany(PreferenceOption::class);
     }
 }

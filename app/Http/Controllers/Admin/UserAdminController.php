@@ -46,7 +46,7 @@ class UserAdminController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('users/index', [
+        return Inertia::render('admin/users/index', [
             'users' => $users,
             'filters' => $request->only(['search', 'role'])
         ]);
