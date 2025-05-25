@@ -38,7 +38,7 @@ export default function UserEdit({ user }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
-            href: '/users',
+            href: '/admin/users',
         },
         {
             title: user.first_name + ' ' + user.last_name,
