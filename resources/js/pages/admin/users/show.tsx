@@ -25,11 +25,11 @@ export default function UserShow({ user }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
-            href: '/users',
+            href: '/admin/users',
         },
         {
             title: `${user.first_name} ${user.last_name}`,
-            href: `/users/${user.id}`,
+            href: `/admin/users/${user.id}`,
         }
     ];
 

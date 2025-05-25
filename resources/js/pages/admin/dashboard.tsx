@@ -1,19 +1,19 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { Home, Users, Calendar, DollarSign, Bell, MessageSquare, Sun, Moon, ArrowUp, ArrowDown ,Settings} from 'lucide-react';
+import { BarChart, Home, Users, Settings, Calendar, MessageSquare, Sun, Moon, ArrowUp, ArrowDown ,DollarSign} from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard Tenant',
+        title: 'Dashboard Admin',
         href: '/dashboard',
     },
 ];
 
 export default function Dashboard() {
     const { auth } = usePage<SharedData>().props;
-    const userName = `${auth.user?.first_name} ${auth.user?.last_name}` || 'Tenant';
+    const userName = `${auth.user?.first_name} ${auth.user?.last_name}` || 'Admin';
     const [darkMode, setDarkMode] = useState(false);
 
     // Theme preference logic
@@ -28,24 +28,24 @@ export default function Dashboard() {
         localStorage.setItem('theme', darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
-    // Tenant-specific stats
+    // Stats data
     const stats = [
-        { name: 'Current Residence', value: 'Green Valley #5', icon: Home, change: 'Active', changeType: 'positive' },
-        { name: 'Roommates', value: '3', icon: Users, change: '+1 new', changeType: 'positive' },
-        { name: 'Next Rent Due', value: 'May 1', icon: DollarSign, change: '3 days', changeType: 'neutral' },
-        { name: 'Notifications', value: '2', icon: Bell, change: 'Unread', changeType: 'positive' },
+        { name: 'Total Properties', value: '124', icon: Home, change: '+12%', changeType: 'positive' },
+        { name: 'Active Users', value: '893', icon: Users, change: '+5%', changeType: 'positive' },
+        { name: 'Pending Bookings', value: '24', icon: Calendar, change: '-3%', changeType: 'negative' },
+        { name: 'New Messages', value: '16', icon: MessageSquare, change: '+8%', changeType: 'positive' },
     ];
 
-    // Tenant activities
+    // Recent activities
     const activities = [
-        { id: 1, type: 'payment', description: 'Rent payment confirmed', details: 'April payment received', time: '2 days ago' },
-        { id: 2, type: 'maintenance', description: 'Maintenance request', details: 'Kitchen sink repair', time: '5 days ago' },
-        { id: 3, type: 'community', description: 'New roommate', details: 'Alex joined your colocation', time: '1 week ago' },
+        { id: 1, type: 'user', description: 'New user registration', details: 'John Doe signed up', time: '2 hours ago' },
+        { id: 2, type: 'property', description: 'New property listed', details: 'Luxury apartment in downtown', time: '5 hours ago' },
+        { id: 3, type: 'payment', description: 'Payment processed', details: 'Transaction #45892 completed', time: '1 day ago' },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Tenant Dashboard" />
+            <Head title="Dashboard" />
             <div className="space-y-8 p-6">
                 {/* Theme Toggle */}
                 <button
@@ -68,7 +68,7 @@ export default function Dashboard() {
                                 Welcome back, <span className="bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent">{userName}</span>
                             </h1>
                             <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-                                Here's your co-living space overview.
+                                Here's what's happening with your platform today.
                             </p>
                         </div>
                         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-teal-500 shadow-lg">
@@ -85,27 +85,24 @@ export default function Dashboard() {
                             key={stat.name}
                             className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-all hover:shadow-lg dark:bg-gray-800/50"
                         >
+                            {/* Gradient accent */}
                             <div className={`absolute inset-x-0 top-0 h-1 ${
                                 stat.changeType === 'positive' 
                                     ? 'bg-gradient-to-r from-green-400 to-teal-500' 
-                                    : stat.changeType === 'negative'
-                                    ? 'bg-gradient-to-r from-amber-400 to-red-500'
-                                    : 'bg-gradient-to-r from-blue-400 to-indigo-500'
+                                    : 'bg-gradient-to-r from-amber-400 to-red-500'
                             }`}></div>
                             
                             <div className="flex items-start justify-between">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.name}</p>
-                                    <p className="mt-2 text-2xl font-bold text-gray-900 dark:text-white">
+                                    <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
                                         {stat.value}
                                     </p>
                                 </div>
                                 <div className={`rounded-lg p-3 ${
                                     stat.changeType === 'positive' 
                                         ? 'bg-green-50 text-green-600 dark:bg-gray-700 dark:text-teal-400' 
-                                        : stat.changeType === 'negative'
-                                        ? 'bg-amber-50 text-amber-600 dark:bg-gray-700 dark:text-red-400'
-                                        : 'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400'
+                                        : 'bg-amber-50 text-amber-600 dark:bg-gray-700 dark:text-red-400'
                                 }`}>
                                     <stat.icon className="h-5 w-5" />
                                 </div>
@@ -113,17 +110,15 @@ export default function Dashboard() {
                             <div className="mt-4 flex items-center">
                                 {stat.changeType === 'positive' ? (
                                     <ArrowUp className="h-4 w-4 text-green-500 dark:text-teal-400" />
-                                ) : stat.changeType === 'negative' ? (
+                                ) : (
                                     <ArrowDown className="h-4 w-4 text-amber-500 dark:text-red-400" />
-                                ) : null}
+                                )}
                                 <span className={`ml-2 text-sm font-medium ${
                                     stat.changeType === 'positive' 
                                         ? 'text-green-600 dark:text-teal-400' 
-                                        : stat.changeType === 'negative'
-                                        ? 'text-amber-600 dark:text-red-400'
-                                        : 'text-blue-600 dark:text-blue-400'
+                                        : 'text-amber-600 dark:text-red-400'
                                 }`}>
-                                    {stat.change}
+                                    {stat.change} from last week
                                 </span>
                             </div>
                         </div>
@@ -149,15 +144,15 @@ export default function Dashboard() {
                                     className="flex items-start rounded-lg p-4 transition-all hover:bg-gray-50 dark:hover:bg-gray-700/30"
                                 >
                                     <div className={`mt-1 mr-4 flex h-10 w-10 items-center justify-center rounded-full ${
-                                        activity.type === 'payment' 
+                                        activity.type === 'user' 
                                             ? 'bg-green-50 text-green-600 dark:bg-gray-700 dark:text-teal-400' 
-                                            : activity.type === 'maintenance'
-                                            ? 'bg-amber-50 text-amber-600 dark:bg-gray-700 dark:text-amber-400'
-                                            : 'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400'
+                                            : activity.type === 'property' 
+                                            ? 'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400' 
+                                            : 'bg-purple-50 text-purple-600 dark:bg-gray-700 dark:text-purple-400'
                                     }`}>
+                                        {activity.type === 'user' && <Users className="h-5 w-5" />}
+                                        {activity.type === 'property' && <Home className="h-5 w-5" />}
                                         {activity.type === 'payment' && <DollarSign className="h-5 w-5" />}
-                                        {activity.type === 'maintenance' && <Settings className="h-5 w-5" />}
-                                        {activity.type === 'community' && <Users className="h-5 w-5" />}
                                     </div>
                                     <div className="flex-1">
                                         <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -182,16 +177,16 @@ export default function Dashboard() {
                         </h2>
                         <div className="mt-6 space-y-3">
                             <button className="flex w-full items-center justify-between rounded-lg bg-green-50 px-4 py-3 text-left text-green-600 transition-all hover:bg-green-100 dark:bg-gray-700 dark:text-teal-400 dark:hover:bg-gray-600">
-                                <span className="font-medium">Pay Rent</span>
-                                <DollarSign className="h-5 w-5" />
+                                <span className="font-medium">Manage Users</span>
+                                <Users className="h-5 w-5" />
                             </button>
                             <button className="flex w-full items-center justify-between rounded-lg bg-blue-50 px-4 py-3 text-left text-blue-600 transition-all hover:bg-blue-100 dark:bg-gray-700 dark:text-blue-400 dark:hover:bg-gray-600">
-                                <span className="font-medium">Request Maintenance</span>
-                                <Settings className="h-5 w-5" />
+                                <span className="font-medium">View Reports</span>
+                                <BarChart className="h-5 w-5" />
                             </button>
                             <button className="flex w-full items-center justify-between rounded-lg bg-purple-50 px-4 py-3 text-left text-purple-600 transition-all hover:bg-purple-100 dark:bg-gray-700 dark:text-purple-400 dark:hover:bg-gray-600">
-                                <span className="font-medium">Message Roommates</span>
-                                <MessageSquare className="h-5 w-5" />
+                                <span className="font-medium">System Settings</span>
+                                <Settings className="h-5 w-5" />
                             </button>
                         </div>
                     </div>

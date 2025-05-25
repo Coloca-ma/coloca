@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import type { SharedData } from '@/types'; // ajuste le chemin si nécessaire
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, User, Users } from 'lucide-react';
+import { Home, LayoutGrid, ListChecks, Search, Users, Wrench } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export const AppSidebar = () => {
@@ -16,49 +16,49 @@ export const AppSidebar = () => {
     const adminNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: '/admin/dashboard',
             icon: LayoutGrid,
         },
         {
             title: 'Users',
-            href: '/users',
+            href: '/admin/users',
             icon: Users,
         },
         {
             title: 'Preferences',
-            href: '/preferences',
-            icon: Users,
+            href: '/admin/preferences',
+            icon: ListChecks,
         },
         {
             title: 'Equipements',
-            href: '/equipements',
-            icon: Users,
+            href: '/admin/equipements',
+            icon: Wrench,
         },
     ];
 
     const proprietaireNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: '/proprietaire/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Mes annonces',
+            title: 'My Listings',
             href: '/proprietaire/annonces',
-            icon: User,
+            icon: Home,
         },
     ];
 
     const colocataireNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: 'colocataire/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Recherche',
-            href: '/colocataire',
-            icon: User,
+            title: 'Search',
+            href: 'colocataire/annonces',
+            icon: Search,
         },
     ];
 
