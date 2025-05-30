@@ -25,6 +25,19 @@ interface Region {
     [key: string]: string;
 }
 
+interface Preference {
+    name: string;
+}
+
+interface PreferenceValue {
+    value: string;
+}
+
+interface AnnoncePreferenceValue {
+    preference: Preference;
+    preference_value: PreferenceValue;
+}
+
 interface Annonce {
     id: string;
     title: string;
@@ -33,7 +46,8 @@ interface Annonce {
     photos: Photo[];
     address_id: string;
     address: Address;
-    [key: string]: string | number | Photo[] | Address;
+    annonce_preference_values: AnnoncePreferenceValue[];
+    [key: string]: string | number | Photo[] | Address | AnnoncePreferenceValue[];
 }
 
 export default function Show({ annonce }: { annonce: Annonce }) {
@@ -44,7 +58,7 @@ export default function Show({ annonce }: { annonce: Annonce }) {
 
     const [emblaRef] = useEmblaCarousel();
     const photos = annonce.photos;
-    console.log(photos ? 'true' : 'false');
+    // console.log(annonce);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -101,6 +115,21 @@ export default function Show({ annonce }: { annonce: Annonce }) {
                                     {annonce.address.region.name}
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                    {/* Preferences */}
+                    <div className="rounded-lg border bg-white p-6 text-black lg:col-span-2">
+                        <div className="max-h-52 overflow-y-auto">
+                            <h3 className="text-2xl font-bold">Annonce preferences:</h3>
+                            {annonce.annonce_preference_values.map((apv, idx) => {
+                                return (
+                                    <div key={idx}>
+                                        <p className="my-1 flex items-center justify-between">
+                                            <span className="font-bold">{apv.preference.name}:</span> <span>{apv.preference_value.value}</span>
+                                        </p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
