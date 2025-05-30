@@ -31,7 +31,8 @@ export default function PreferenceForm({ data, setData, errors, processing, onSu
 
         const newOption: PreferenceValue = {
             id: Date.now(),
-            value: trimmed.toLowerCase().replace(/\s+/g, '_'),
+            value: trimmed.toLowerCase(),
+            // value: trimmed.toLowerCase().replace(/\s+/g, '_'),
         };
 
         setData('preference_values', [...data.preference_values, newOption]);

@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
 
 type LoginForm = {
     email: string;
@@ -27,6 +26,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         password: '',
         remember: false,
     });
+
+    useEffect(() => console.log(data), [data]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -61,9 +62,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <h1 className="mb-3 text-3xl font-bold text-gray-900 dark:text-white">
                         Welcome to <span className="bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent">COLOCA</span>
                     </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">
-                        Sign in to your account
-                    </p>
+                    <p className="text-lg text-gray-600 dark:text-gray-300">Sign in to your account</p>
                 </div>
 
                 {status && (
@@ -81,7 +80,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             <Input
                                 id="email"
                                 type="email"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 required
                                 autoFocus
                                 autoComplete="email"
@@ -99,8 +98,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     Password *
                                 </Label>
                                 {canResetPassword && (
-                                    <TextLink 
-                                        href={route('password.request')} 
+                                    <TextLink
+                                        href={route('password.request')}
                                         className="text-sm text-green-600 hover:text-green-700 dark:text-teal-400 dark:hover:text-teal-300"
                                     >
                                         Forgot password?
@@ -110,7 +109,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             <Input
                                 id="password"
                                 type="password"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 required
                                 autoComplete="current-password"
                                 value={data.password}
@@ -135,23 +134,19 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             </Label>
                         </div>
 
-                        <Button 
-                            type="submit" 
-                            className="mt-6 w-full bg-gradient-to-r from-green-600 to-teal-600 py-6 text-lg font-medium text-white shadow-lg hover:from-green-700 hover:to-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 dark:ring-offset-gray-800" 
+                        <Button
+                            type="submit"
+                            className="mt-6 w-full bg-gradient-to-r from-green-600 to-teal-600 py-6 text-lg font-medium text-white shadow-lg hover:from-green-700 hover:to-teal-700 focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:ring-offset-gray-800"
                             disabled={processing}
                         >
-                            {processing ? (
-                                <LoaderCircle className="h-5 w-5 animate-spin" />
-                            ) : (
-                                "Sign In"
-                            )}
+                            {processing ? <LoaderCircle className="h-5 w-5 animate-spin" /> : 'Sign In'}
                         </Button>
                     </div>
 
                     <div className="pt-2 text-center text-sm text-gray-600 dark:text-gray-400">
                         Don't have an account?{' '}
-                        <TextLink 
-                            href={route('register')} 
+                        <TextLink
+                            href={route('register')}
                             className="font-medium text-green-600 hover:text-green-700 dark:text-teal-400 dark:hover:text-teal-300"
                         >
                             Create one

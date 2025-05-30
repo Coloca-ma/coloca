@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('annonce_preference_values', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('annonce_id');
             $table->uuid('preference_id');
             $table->uuid('preference_option_id');

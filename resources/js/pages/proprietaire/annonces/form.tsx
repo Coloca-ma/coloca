@@ -4,6 +4,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { useForm } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { PreferenceSelector } from './prefSelectore';
 
 interface Region {
     id: string;
@@ -21,6 +23,42 @@ interface Address {
     [key: string]: string | undefined | Region;
 }
 
+interface PreferenceValue {
+    id: string;
+    value: string;
+    preference_id: string;
+    [key: string]: string;
+}
+
+interface Preference {
+    id: string;
+    name: string;
+    preference_values: PreferenceValue[];
+    [key: string]: string | PreferenceValue[];
+}
+
+interface AnnoncePreference {
+    id: string;
+    name: string;
+}
+
+interface AnnoncePreferenceValue {
+    id: string;
+    value: string;
+}
+
+interface AnnoncePreferenceValues {
+    preference: AnnoncePreference;
+    preference_value: AnnoncePreferenceValue;
+}
+
+interface SelectedPreference {
+    preferenceId: string;
+    preferenceName: string;
+    valueId: string;
+    valueName: string;
+}
+
 interface Annonce {
     id?: string;
     title: string;
@@ -28,7 +66,8 @@ interface Annonce {
     address_id: string;
     address: Address;
     loyer: number;
-    [key: string]: string | undefined | Address | number;
+    annonce_preference_values: AnnoncePreferenceValues[];
+    [key: string]: string | undefined | Address | number | AnnoncePreferenceValues[];
 }
 
 interface FormData {
@@ -37,12 +76,14 @@ interface FormData {
     address: Address;
     loyer: number;
     photos: File[];
-    [key: string]: string | number | Address | File[];
+    preferences: any;
+    [key: string]: string | number | Address | File[] | any;
 }
 
 interface Props {
     regions?: Region[];
     annonce?: Annonce;
+    preferences: Preference[];
     type: string;
 }
 
@@ -58,7 +99,7 @@ const Textarea = ({ className, ...props }: React.TextareaHTMLAttributes<HTMLText
     />
 );
 
-export default function Form({ annonce, regions, type }: Props) {
+export default function Form({ annonce, regions, type, preferences }: Props) {
     const { data, setData, post, processing, errors } = useForm<FormData>({
         title: annonce?.title || '',
         description: annonce?.description || '',
@@ -72,8 +113,24 @@ export default function Form({ annonce, regions, type }: Props) {
         },
         loyer: annonce?.loyer || 0,
         photos: [],
+        preferences: preferences,
         ...(type === 'edit' && { _method: 'PUT' }),
     });
+    const [initSelectPref, setinitSelectPref] = useState<SelectedPreference[]>([]);
+
+    useEffect(() => {
+        if (annonce?.annonce_preference_values) {
+            const initialPrefs: SelectedPreference[] = annonce.annonce_preference_values.map((prefVal) => ({
+                preferenceId: prefVal.preference.id,
+                preferenceName: prefVal.preference.name,
+                valueId: prefVal.preference_value.id,
+                valueName: prefVal.preference_value.value,
+            }));
+            setinitSelectPref(initialPrefs);
+        }
+    }, [annonce]);
+
+    // useEffect(() => console.log(data), [data]);
 
     function handleAddressChange(field: string, value: string) {
         setData('address', {
@@ -91,15 +148,15 @@ export default function Form({ annonce, regions, type }: Props) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        console.log('Form submitted with data:');
+        // console.log('Form submitted with data:');
 
         post(route(type === 'create' ? 'annonces.store' : 'annonces.update', { annonce }), {
             forceFormData: true,
             onSuccess: () => {
-                console.log('Form submitted successfully');
+                // console.log('Form submitted successfully');
             },
             onError: (errors) => {
-                console.error('Form submission errors:', errors);
+                // console.error('Form submission errors:', errors);
             },
         });
     }
@@ -196,6 +253,18 @@ export default function Form({ annonce, regions, type }: Props) {
                 {errors['address.region.id'] && <p className="mt-1 text-sm text-red-500">{errors['address.region.id']}</p>}
             </div>
             <div>
+                <Label htmlFor="preferences">Preferences</Label>
+                <PreferenceSelector
+                    preferences={preferences}
+                    onPreferencesChange={(selectedPreferences) => {
+                        setData('preferences', selectedPreferences);
+                    }}
+                    initialSelectedPreferences={initSelectPref}
+                />
+                {errors['preferences'] && <p className="mt-1 text-sm text-red-500">{errors['preferences']}</p>}
+            </div>
+
+            <div>
                 <Label htmlFor="loyer">Loyer</Label>
                 <Input
                     id="loyer"
@@ -223,7 +292,7 @@ export default function Form({ annonce, regions, type }: Props) {
 
             <div className="flex items-center gap-4">
                 <Button type="submit" disabled={processing}>
-                    Create
+                    {type === 'create' ? 'Create' : 'Edit'}
                 </Button>
                 <Button type="button" variant="outline" onClick={() => window.history.back()}>
                     Cancel

@@ -29,6 +29,9 @@ class StoreAnnonceRequest extends FormRequest
             "address.postal_code" => "required|digits:5",
             "address.region.id" => "required|string|exists:regions,id",
             "loyer" => "required|numeric",
+            "preferences" => "required|array",
+            "preferences.*.preferenceId" => "required|string|exists:preferences,id",
+            "preferences.*.valueId" => "required|string|exists:preference_options,id",
             "photos" => "array",
             "photos.*" => 'image|mimes:jpeg,png,jpg,gif,svg',
         ];
