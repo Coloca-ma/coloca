@@ -20,7 +20,7 @@ export const AppSidebar = () => {
             icon: LayoutGrid,
         },
         {
-            title: 'Utilisateurs',
+            title: 'Users',
             href: '/users',
             icon: Users,
         },
