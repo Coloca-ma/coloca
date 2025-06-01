@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\EquipementController;
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Proprietaire\AnnonceController;
-use App\Http\Controllers\Colocataire\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +43,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Colocataire routes
     Route::middleware(['role:colocataire'])->prefix('colocataire')->group(function () {
         Route::inertia('/dashboard', 'colocataire/dashboard')->name('colocataire.dashboard');
-        // Route::get('/search', [SearchController::class, 'index'])->name('colocataire.search');
     });
 
 });
