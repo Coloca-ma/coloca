@@ -40,8 +40,8 @@ class Annonce extends Model
         return $this->hasMany(AnnoncePreferenceValue::class);
     }
 
-    public function equipements()
+    public function annonceEquipements()
     {
-        return $this->hasMany(Equipement::class);
+        return $this->hasMany(AnnonceEquipement::class);
     }
 }

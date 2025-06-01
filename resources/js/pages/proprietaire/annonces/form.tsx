@@ -5,12 +5,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { cn } from '@/lib/utils';
 import { useForm } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
+import EquipementSelector from './equipSelector';
 import { PreferenceSelector } from './prefSelectore';
 
 interface Region {
     id: string;
     name?: string;
     [key: string]: string | undefined;
+}
+
+interface Equipement {
+    id: string;
+    name: string;
+    [key: string]: string;
 }
 
 interface Address {
@@ -47,6 +54,13 @@ interface AnnoncePreferenceValue {
     value: string;
 }
 
+interface AnnonceEquipement {
+    id: string;
+    equipement_id: string;
+    annonce_id: string;
+    equipements: Equipement;
+}
+
 interface AnnoncePreferenceValues {
     preference: AnnoncePreference;
     preference_value: AnnoncePreferenceValue;
@@ -59,6 +73,12 @@ interface SelectedPreference {
     valueName: string;
 }
 
+// interface SelectedEquipement {
+//     equipement_id: string;
+//     annonce_id: string;
+//     equipementName: string;
+// }
+
 interface Annonce {
     id?: string;
     title: string;
@@ -67,7 +87,8 @@ interface Annonce {
     address: Address;
     loyer: number;
     annonce_preference_values: AnnoncePreferenceValues[];
-    [key: string]: string | undefined | Address | number | AnnoncePreferenceValues[];
+    annonce_equipements: AnnonceEquipement[];
+    [key: string]: string | undefined | Address | number | AnnoncePreferenceValues[] | AnnonceEquipement[];
 }
 
 interface FormData {
@@ -77,6 +98,7 @@ interface FormData {
     loyer: number;
     photos: File[];
     preferences: any;
+    equipements: any;
     [key: string]: string | number | Address | File[] | any;
 }
 
@@ -85,6 +107,7 @@ interface Props {
     annonce?: Annonce;
     preferences: Preference[];
     type: string;
+    equipements: Equipement[];
 }
 
 const Textarea = ({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
@@ -99,7 +122,7 @@ const Textarea = ({ className, ...props }: React.TextareaHTMLAttributes<HTMLText
     />
 );
 
-export default function Form({ annonce, regions, type, preferences }: Props) {
+export default function Form({ annonce, regions, type, preferences, equipements }: Props) {
     const { data, setData, post, processing, errors } = useForm<FormData>({
         title: annonce?.title || '',
         description: annonce?.description || '',
@@ -114,9 +137,11 @@ export default function Form({ annonce, regions, type, preferences }: Props) {
         loyer: annonce?.loyer || 0,
         photos: [],
         preferences: preferences,
+        equipements: equipements,
         ...(type === 'edit' && { _method: 'PUT' }),
     });
     const [initSelectPref, setinitSelectPref] = useState<SelectedPreference[]>([]);
+    const [initSelectEquip, setinitSelectEquip] = useState<Equipement[]>([]);
 
     useEffect(() => {
         if (annonce?.annonce_preference_values) {
@@ -130,7 +155,27 @@ export default function Form({ annonce, regions, type, preferences }: Props) {
         }
     }, [annonce]);
 
-    // useEffect(() => console.log(data), [data]);
+    useEffect(() => {
+        if (annonce?.annonce_equipements) {
+            const initialEquips: Equipement[] = annonce.annonce_equipements.map((equip) => ({
+                id: equip.equipement_id,
+                // annonce_id: equip.annonce_id,
+                name: equip.equipements.name,
+            }));
+            // console.log(initialEquips, 'from useEffect of initialEquips');
+
+            setinitSelectEquip(initialEquips);
+        }
+    }, [equipements]);
+
+    useEffect(() => {
+        setData('preferences', initSelectPref);
+    }, [initSelectPref]);
+
+    useEffect(() => {
+        setData('equipements', initSelectEquip);
+    }, [initSelectEquip]);
+    // useEffect(() => console.log(data.preferences, initSelectPref), [data, initSelectPref]);
 
     function handleAddressChange(field: string, value: string) {
         setData('address', {
@@ -149,6 +194,7 @@ export default function Form({ annonce, regions, type, preferences }: Props) {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         // console.log('Form submitted with data:');
+        console.log(data);
 
         post(route(type === 'create' ? 'annonces.store' : 'annonces.update', { annonce }), {
             forceFormData: true,
@@ -156,7 +202,7 @@ export default function Form({ annonce, regions, type, preferences }: Props) {
                 // console.log('Form submitted successfully');
             },
             onError: (errors) => {
-                // console.error('Form submission errors:', errors);
+                console.error('Form submission errors:', errors);
             },
         });
     }
@@ -257,11 +303,24 @@ export default function Form({ annonce, regions, type, preferences }: Props) {
                 <PreferenceSelector
                     preferences={preferences}
                     onPreferencesChange={(selectedPreferences) => {
+                        console.log(selectedPreferences, '#FRom compo');
+
                         setData('preferences', selectedPreferences);
                     }}
                     initialSelectedPreferences={initSelectPref}
                 />
                 {errors['preferences'] && <p className="mt-1 text-sm text-red-500">{errors['preferences']}</p>}
+            </div>
+            <div>
+                <Label htmlFor="preferences">Equipements</Label>
+                <EquipementSelector
+                    equipements={equipements}
+                    onEquipementsChange={(selectedEquipement) => {
+                        setData('equipements', selectedEquipement);
+                    }}
+                    initialSelectedEquipements={initSelectEquip}
+                />
+                {errors['equipements'] && <p className="mt-1 text-sm text-red-500">{errors['equipements']}</p>}
             </div>
 
             <div>

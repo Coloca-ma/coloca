@@ -32,6 +32,9 @@ class StoreAnnonceRequest extends FormRequest
             "preferences" => "required|array",
             "preferences.*.preferenceId" => "required|string|exists:preferences,id",
             "preferences.*.valueId" => "required|string|exists:preference_options,id",
+            "equipements" => "required|array",
+            "equipements.*.id" => "required|string|exists:equipements,id",
+            "equipements.*.name" => "required|string|exists:equipements,name",
             "photos" => "array",
             "photos.*" => 'image|mimes:jpeg,png,jpg,gif,svg',
         ];

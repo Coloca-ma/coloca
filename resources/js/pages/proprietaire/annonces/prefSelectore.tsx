@@ -47,6 +47,8 @@ export function PreferenceSelector({ preferences, onPreferencesChange, initialSe
         setSelectedPreferences(initialSelectedPreferences);
     }, [initialSelectedPreferences]);
 
+    // console.log(selectedPreferences, preferences);
+
     // Get list of preferences not yet selected
     const availablePreferences = preferences.filter((pref) => !selectedPreferences.some((selected) => selected.preferenceId === pref.id));
 
@@ -60,6 +62,8 @@ export function PreferenceSelector({ preferences, onPreferencesChange, initialSe
 
         const updatedPreferences = [...selectedPreferences, newSelectedPreference];
         setSelectedPreferences(updatedPreferences);
+        console.log(updatedPreferences);
+
         onPreferencesChange(updatedPreferences);
     };
 

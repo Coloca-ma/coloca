@@ -102,6 +102,7 @@ export default function Index({ annonces, addresses, success }: Props) {
                             ))}
                         </tbody>
                     </table>
+                    {/* <EquipSelector /> */}
                 </div>
             </div>
         </AppLayout>
