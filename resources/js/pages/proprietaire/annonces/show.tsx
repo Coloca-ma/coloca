@@ -110,7 +110,7 @@ export default function Show({ annonce }: { annonce: Annonce }) {
                         <div className="max-h-52 overflow-y-auto">
                             <div>
                                 <h2 className="mb-1 text-lg font-semibold text-gray-900">Loyer mensuel</h2>
-                                <p className="text-3xl font-bold text-gray-900">{annonce.loyer} €</p>
+                                <p className="text-3xl font-bold text-gray-900">{annonce.loyer} MAD</p>
                             </div>
                             <hr className="my-3" />
                             <div>
