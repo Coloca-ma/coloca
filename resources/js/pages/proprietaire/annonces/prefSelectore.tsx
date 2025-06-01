@@ -62,7 +62,7 @@ export function PreferenceSelector({ preferences, onPreferencesChange, initialSe
 
         const updatedPreferences = [...selectedPreferences, newSelectedPreference];
         setSelectedPreferences(updatedPreferences);
-        console.log(updatedPreferences);
+        // console.log(updatedPreferences);
 
         onPreferencesChange(updatedPreferences);
     };

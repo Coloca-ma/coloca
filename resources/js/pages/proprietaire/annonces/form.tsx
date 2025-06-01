@@ -194,7 +194,7 @@ export default function Form({ annonce, regions, type, preferences, equipements 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         // console.log('Form submitted with data:');
-        console.log(data);
+        // console.log(data);
 
         post(route(type === 'create' ? 'annonces.store' : 'annonces.update', { annonce }), {
             forceFormData: true,
@@ -303,8 +303,6 @@ export default function Form({ annonce, regions, type, preferences, equipements 
                 <PreferenceSelector
                     preferences={preferences}
                     onPreferencesChange={(selectedPreferences) => {
-                        console.log(selectedPreferences, '#FRom compo');
-
                         setData('preferences', selectedPreferences);
                     }}
                     initialSelectedPreferences={initSelectPref}

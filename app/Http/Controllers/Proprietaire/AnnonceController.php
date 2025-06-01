@@ -13,6 +13,7 @@ use App\Models\Photo;
 use App\Models\Preference;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -55,6 +56,7 @@ class AnnonceController extends Controller
             'description' => $validated['description'],
             'loyer' => $validated['loyer'],
             'address_id' => $address->id,
+            'user_id' => Auth::id(),
         ]);
 
         foreach ($validated["preferences"] as $prefAnnonce) {

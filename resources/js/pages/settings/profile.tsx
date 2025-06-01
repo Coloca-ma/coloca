@@ -23,7 +23,7 @@ type ProfileForm = {
     first_name: string;
     last_name: string;
     email: string;
-}
+};
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
@@ -34,18 +34,18 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
         email: auth.user.email,
     });
 
-const submit: FormEventHandler = (e) => {
-    e.preventDefault();
-    patch(route('profile.update'), {
-        preserveScroll: true,
-        onError: (errors) => {
-            console.error('Update error:', errors);
-        },
-        onSuccess: () => {
-            console.log('Profile updated successfully');
-        },
-    });
-};
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        patch(route('profile.update'), {
+            preserveScroll: true,
+            onError: (errors) => {
+                // console.error('Update error:', errors);
+            },
+            onSuccess: () => {
+                // console.log('Profile updated successfully');
+            },
+        });
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
