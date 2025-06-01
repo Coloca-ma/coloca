@@ -15,7 +15,7 @@ class Annonce extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'address_id', 'loyer'];
+    protected $fillable = ['title', 'description', 'user_id', 'address_id', 'loyer'];
 
     // Un annonce appartient à une adresse
     public function address()
@@ -40,8 +40,13 @@ class Annonce extends Model
         return $this->hasMany(AnnoncePreferenceValue::class);
     }
 
-    public function equipements()
+    public function annonceEquipements()
     {
-        return $this->hasMany(Equipement::class);
+        return $this->hasMany(AnnonceEquipement::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

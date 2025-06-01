@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAnnonceRequest;
 use App\Models\Address;
 use App\Models\Annonce;
+use App\Models\AnnonceEquipement;
 use App\Models\AnnoncePreferenceValue;
 use App\Models\Equipement;
 use App\Models\Photo;
 use App\Models\Preference;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -29,7 +31,7 @@ class AnnonceController extends Controller
 
     public function create()
     {
-        Log::info(Preference::all()->load(['preferenceValues']));
+        // Log::info(Preference::all()->load(['preferenceValues']));
         return Inertia::render('proprietaire/annonces/create', [
             'regions' => Region::all(),
             'equipements' => Equipement::all(),
@@ -40,7 +42,7 @@ class AnnonceController extends Controller
     public function store(StoreAnnonceRequest $req)
     {
         $validated = $req->validated();
-        // dd($validated["preferences"]);
+        // dd($validated);
 
         $address = Address::create([
             'street' => $validated["address"]["street"],
@@ -54,6 +56,7 @@ class AnnonceController extends Controller
             'description' => $validated['description'],
             'loyer' => $validated['loyer'],
             'address_id' => $address->id,
+            'user_id' => Auth::id(),
         ]);
 
         foreach ($validated["preferences"] as $prefAnnonce) {
@@ -61,6 +64,14 @@ class AnnonceController extends Controller
                 'annonce_id' => $annonce->id,
                 'preference_id' => $prefAnnonce['preferenceId'],
                 'preference_option_id' => $prefAnnonce['valueId'],
+            ]);
+        }
+
+        foreach ($validated["equipements"] as $equipement) {
+            Log::info($equipement);
+            AnnonceEquipement::create([
+                "annonce_id" => $annonce->id,
+                "equipement_id" => $equipement['id'],
             ]);
         }
 
@@ -81,8 +92,8 @@ class AnnonceController extends Controller
 
     public function show(Annonce $annonce)
     {
-        $annonce = $annonce->load(['address.region', 'photos', 'annoncePreferenceValues.preference', 'annoncePreferenceValues.preferenceValue.preference']);
-        Log::info($annonce);
+        $annonce = $annonce->load(['address.region', 'photos', 'annoncePreferenceValues.preference', 'annoncePreferenceValues.preferenceValue.preference', 'annonceEquipements', 'annonceEquipements.equipements']);
+        // Log::info($annonce);
 
         return Inertia::render('proprietaire/annonces/show', [
             'annonce' => $annonce,
@@ -91,7 +102,7 @@ class AnnonceController extends Controller
 
     public function edit(Annonce $annonce)
     {
-        $annonce = $annonce->load(['address.region', 'photos', 'annoncePreferenceValues.preference', 'annoncePreferenceValues.preferenceValue']);
+        $annonce = $annonce->load(['address.region', 'photos', 'annoncePreferenceValues.preference', 'annoncePreferenceValues.preferenceValue', 'annonceEquipements', 'annonceEquipements.equipements']);
         Log::info($annonce);
         // dd($annonce);
 
@@ -99,11 +110,13 @@ class AnnonceController extends Controller
             'annonce' => $annonce,
             'regions' => Region::all(),
             'preferences' => Preference::all()->load(['preferenceValues']),
+            'equipements' => Equipement::all(),
         ]);
     }
 
     public function update(StoreAnnonceRequest $req, Annonce $annonce)
     {
+
         $validated = $req->validated();
 
         $annonce->update([
@@ -119,9 +132,28 @@ class AnnonceController extends Controller
             'region_id' => $validated['address']['region']['id'],
         ]);
 
+        $incomingEquipementIds = collect($validated['equipements'])->pluck('id')->toArray();
+
+        // Delete all equipements that are no longer selected by the user
+
+        $annonce->annonceEquipements()
+            ->whereNotIn('equipement_id', $incomingEquipementIds)
+            ->delete();
+
+
+        foreach ($validated["equipements"] as $equipAnnonce) {
+            AnnonceEquipement::updateOrCreate(
+                [
+                    'annonce_id' => $annonce->id,
+                    'equipement_id' => $equipAnnonce['id'],
+                ],
+                []
+            );
+        }
+
         $incomingPreferenceIds = collect($validated['preferences'])->pluck('preferenceId')->toArray();
 
-        // Delete all preferences that are no longer selected by the user
+        // Delete all equipements that are no longer selected by the user
         $annonce->annoncePreferenceValues()
             ->whereNotIn('preference_id', $incomingPreferenceIds)
             ->delete();
@@ -138,24 +170,19 @@ class AnnonceController extends Controller
             );
         }
 
-
-
         if ($req->hasFile('photos')) {
             foreach ($annonce->photos as $photo) {
                 Storage::disk("public")->delete($photo->path);
                 $photo->delete();
             }
 
-            foreach ($validated["preferences"] as $prefAnnonce) {
-                AnnoncePreferenceValue::updateOrCreate(
-                    [
-                        'annonce_id' => $annonce->id,
-                        'preference_id' => $prefAnnonce['preferenceId'],
-                    ],
-                    [
-                        'preference_option_id' => $prefAnnonce['valueId'],
-                    ]
-                );
+            foreach ($req->file('photos') as $photo) {
+                $path = $photo->store('annonces', 'public');
+
+                $annonce->photos()->create([
+                    'path' => $path,
+                    'original_name' => $photo->getClientOriginalName(),
+                ]);
             }
         }
 

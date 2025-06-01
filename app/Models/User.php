@@ -11,13 +11,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Models\Address;
 use App\Models\Avis;
 use App\Models\Message;
-use App\Models\Paiement; 
+use App\Models\Paiement;
 use App\Models\PreferenceType;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasUuids, SoftDeletes ;
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -91,9 +91,13 @@ class User extends Authenticatable
     }
 
     // Un user a plusieurs préférences
-    public function preferenceTypes()
-    {
-        return $this->hasMany(PreferenceType::class);
-    }
+    // public function preferenceTypes()
+    // {
+    //     return $this->hasMany(PreferenceType::class);
+    // }
 
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class);
+    }
 }

@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
     first_name: string;
@@ -36,10 +35,10 @@ export default function Register() {
         post(route('register'), {
             onFinish: () => {
                 reset('password', 'password_confirmation');
-                console.log('Registration complete');
+                // console.log('Registration complete');
             },
             onError: (errors) => {
-                console.error('Registration errors:', errors);
+                // console.error('Registration errors:', errors);
             },
         });
     };
@@ -69,9 +68,7 @@ export default function Register() {
                     <h1 className="mb-3 text-3xl font-bold text-gray-900 dark:text-white">
                         Join <span className="bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent">COLOCA</span>
                     </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">
-                        Find your perfect shared living space
-                    </p>
+                    <p className="text-lg text-gray-600 dark:text-gray-300">Find your perfect shared living space</p>
                 </div>
 
                 <form className="space-y-5 rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-800/50 dark:shadow-gray-700/30" onSubmit={submit}>
@@ -82,7 +79,7 @@ export default function Register() {
                             </Label>
                             <Input
                                 id="first_name"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 value={data.first_name}
                                 onChange={(e) => setData('first_name', e.target.value)}
                                 required
@@ -98,7 +95,7 @@ export default function Register() {
                             </Label>
                             <Input
                                 id="last_name"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 value={data.last_name}
                                 onChange={(e) => setData('last_name', e.target.value)}
                                 required
@@ -115,7 +112,7 @@ export default function Register() {
                         <Input
                             id="phone"
                             type="tel"
-                            className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                            className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                             value={data.phone}
                             onChange={(e) => setData('phone', e.target.value)}
                             required
@@ -134,20 +131,14 @@ export default function Register() {
                             onValueChange={(value: 'colocataire' | 'proprietaire') => setData('role', value)}
                             disabled={processing}
                         >
-                            <SelectTrigger className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500">
+                            <SelectTrigger className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500">
                                 <SelectValue placeholder="Select your role" />
                             </SelectTrigger>
                             <SelectContent className="border-gray-200 dark:border-gray-600 dark:bg-gray-700">
-                                <SelectItem 
-                                    value="colocataire"
-                                    className="hover:bg-gray-100 dark:hover:bg-gray-600"
-                                >
+                                <SelectItem value="colocataire" className="hover:bg-gray-100 dark:hover:bg-gray-600">
                                     Tenant (Colocataire)
                                 </SelectItem>
-                                <SelectItem 
-                                    value="proprietaire"
-                                    className="hover:bg-gray-100 dark:hover:bg-gray-600"
-                                >
+                                <SelectItem value="proprietaire" className="hover:bg-gray-100 dark:hover:bg-gray-600">
                                     Owner (Propriétaire)
                                 </SelectItem>
                             </SelectContent>
@@ -162,7 +153,7 @@ export default function Register() {
                         <Input
                             id="email"
                             type="email"
-                            className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                            className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                             required
                             autoComplete="email"
                             value={data.email}
@@ -181,7 +172,7 @@ export default function Register() {
                             <Input
                                 id="password"
                                 type="password"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 required
                                 autoComplete="new-password"
                                 value={data.password}
@@ -199,7 +190,7 @@ export default function Register() {
                             <Input
                                 id="password_confirmation"
                                 type="password"
-                                className="focus:ring-2 focus:ring-green-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
+                                className="focus:border-transparent focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white dark:focus:ring-teal-500"
                                 required
                                 autoComplete="new-password"
                                 value={data.password_confirmation}
@@ -211,22 +202,18 @@ export default function Register() {
                         </div>
                     </div>
 
-                    <Button 
-                        type="submit" 
-                        className="mt-6 w-full bg-gradient-to-r from-green-600 to-teal-600 py-6 text-lg font-medium text-white shadow-lg hover:from-green-700 hover:to-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 dark:ring-offset-gray-800" 
+                    <Button
+                        type="submit"
+                        className="mt-6 w-full bg-gradient-to-r from-green-600 to-teal-600 py-6 text-lg font-medium text-white shadow-lg hover:from-green-700 hover:to-teal-700 focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:ring-offset-gray-800"
                         disabled={processing}
                     >
-                        {processing ? (
-                            <LoaderCircle className="h-5 w-5 animate-spin" />
-                        ) : (
-                            "Create Account"
-                        )}
+                        {processing ? <LoaderCircle className="h-5 w-5 animate-spin" /> : 'Create Account'}
                     </Button>
 
                     <div className="pt-2 text-center text-sm text-gray-600 dark:text-gray-400">
                         Already have an account?{' '}
-                        <TextLink 
-                            href={route('login')} 
+                        <TextLink
+                            href={route('login')}
                             className="font-medium text-green-600 hover:text-green-700 dark:text-teal-400 dark:hover:text-teal-300"
                         >
                             Sign in here

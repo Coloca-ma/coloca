@@ -38,6 +38,16 @@ interface AnnoncePreferenceValue {
     preference_value: PreferenceValue;
 }
 
+interface Equipement {
+    id: string;
+    name: string;
+}
+
+interface AnnonceEquipement {
+    id: string;
+    equipements: Equipement;
+}
+
 interface Annonce {
     id: string;
     title: string;
@@ -47,7 +57,8 @@ interface Annonce {
     address_id: string;
     address: Address;
     annonce_preference_values: AnnoncePreferenceValue[];
-    [key: string]: string | number | Photo[] | Address | AnnoncePreferenceValue[];
+    annonce_equipements: AnnonceEquipement[];
+    [key: string]: string | number | Photo[] | Address | AnnoncePreferenceValue[] | AnnonceEquipement[];
 }
 
 export default function Show({ annonce }: { annonce: Annonce }) {
@@ -126,6 +137,21 @@ export default function Show({ annonce }: { annonce: Annonce }) {
                                     <div key={idx}>
                                         <p className="my-1 flex items-center justify-between">
                                             <span className="font-bold">{apv.preference.name}:</span> <span>{apv.preference_value.value}</span>
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    {/* Rent and Address */}
+                    <div className="space-y-4 rounded-lg border bg-white p-6 text-black">
+                        <div className="max-h-52 overflow-y-auto">
+                            <h3 className="text-2xl font-bold">Annonce equipements:</h3>
+                            {annonce.annonce_equipements.map((equip, idx) => {
+                                return (
+                                    <div key={idx}>
+                                        <p className="my-1 flex items-center justify-between">
+                                            <span className="font-bold">{equip.equipements.name}</span>
                                         </p>
                                     </div>
                                 );

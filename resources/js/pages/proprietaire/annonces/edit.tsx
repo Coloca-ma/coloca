@@ -34,6 +34,13 @@ interface AnnoncePreferenceValues {
     preference_value: AnnoncePreferenceValue;
 }
 
+interface AnnonceEquipement {
+    id: string;
+    equipement_id: string;
+    annonce_id: string;
+    equipements: Equipement;
+}
+
 interface Annonce {
     id?: string;
     title: string;
@@ -42,7 +49,8 @@ interface Annonce {
     address: Address;
     loyer: number;
     annonce_preference_values: AnnoncePreferenceValues[];
-    [key: string]: string | undefined | Address | number | AnnoncePreferenceValues[];
+    annonce_equipements: AnnonceEquipement[];
+    [key: string]: string | undefined | Address | number | AnnoncePreferenceValues[] | AnnonceEquipement[];
 }
 
 interface PreferenceValue {
@@ -59,24 +67,32 @@ interface Preference {
     [key: string]: string | PreferenceValue[];
 }
 
+interface Equipement {
+    id: string;
+    name: string;
+    [key: string]: string;
+}
+
 interface Props {
     annonce: Annonce;
     regions: Region[];
     preferences: Preference[];
+    equipements: Equipement[];
 }
 
-export default function Edit({ annonce, regions, preferences }: Props) {
+export default function Edit({ annonce, regions, preferences, equipements }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Annonces', href: route('annonces.index') },
         { title: 'Edit Annonce', href: route('annonces.edit', annonce.id) },
     ];
+    // console.log(annonce);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Annonce" />
             <div className="mx-auto w-full space-y-8 px-4 py-8 xl:max-w-6xl">
                 <h1 className="mx-auto mb-6 max-w-2xl text-2xl font-bold">Edit Annonce</h1>
-                <Form regions={regions} annonce={annonce} preferences={preferences} type="edit" />
+                <Form regions={regions} annonce={annonce} preferences={preferences} equipements={equipements} type="edit" />
             </div>
         </AppLayout>
     );

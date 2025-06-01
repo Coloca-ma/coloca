@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler, useEffect } from 'react';
+import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -27,7 +27,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         remember: false,
     });
 
-    useEffect(() => console.log(data), [data]);
+    // useEffect(() => console.log(data), [data]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
