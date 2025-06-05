@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EquipementSeeder::class,
             PreferenceSeeder::class,
+            AnnonceSeeder::class,
         ]);
     }
 }

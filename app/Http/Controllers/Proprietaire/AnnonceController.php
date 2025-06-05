@@ -22,8 +22,18 @@ class AnnonceController extends Controller
 {
     public function index()
     {
+        // return Inertia::render('proprietaire/annonces/index', [
+        //     'annonces' => Annonce::with('address')->get(),
+        //     'addresses' => Address::all(),
+        //     'success' => session('success'),
+        // ]);
+
+        // Récupérer uniquement les annonces de l'utilisateur connecté
+        $annonces = Annonce::where('user_id', Auth::id())
+            ->get();
+
         return Inertia::render('proprietaire/annonces/index', [
-            'annonces' => Annonce::with('address')->get(),
+            'annonces' => $annonces,
             'addresses' => Address::all(),
             'success' => session('success'),
         ]);
@@ -92,6 +102,10 @@ class AnnonceController extends Controller
 
     public function show(Annonce $annonce)
     {
+        // Vérifier que l'annonce appartient à l'utilisateur
+        // if ($annonce->user_id !== Auth::id()) {
+        //     abort(403);
+        // }
         $annonce = $annonce->load(['address.region', 'photos', 'annoncePreferenceValues.preference', 'annoncePreferenceValues.preferenceValue.preference', 'annonceEquipements', 'annonceEquipements.equipements']);
         // Log::info($annonce);
 

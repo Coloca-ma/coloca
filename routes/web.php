@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\EquipementController;
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\UserAdminController;
+use App\Http\Controllers\Colocataire\ColocataireAnnonceController;
 use App\Http\Controllers\Proprietaire\AnnonceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Colocataire routes
     Route::middleware(['role:colocataire'])->prefix('colocataire')->group(function () {
         Route::inertia('/dashboard', 'colocataire/dashboard')->name('colocataire.dashboard');
+        Route::resource('annonces', ColocataireAnnonceController::class);
     });
 
 });

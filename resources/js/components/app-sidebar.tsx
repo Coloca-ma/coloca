@@ -52,12 +52,12 @@ export const AppSidebar = () => {
     const colocataireNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: 'colocataire/dashboard',
+            href: '/colocataire/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Search',
-            href: 'colocataire/annonces',
+            title: 'Search Listings',
+            href: '/colocataire/annonces',
             icon: Search,
         },
     ];

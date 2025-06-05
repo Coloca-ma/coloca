@@ -30,5 +30,25 @@ class UserSeeder extends Seeder
             'email' => 'marouane@gmail.com',
             'password' => Hash::make('marouane123'),
         ]);
+
+        User::create([
+            'id' => Str::uuid(),
+            'first_name' => 'Youssef',
+            'last_name' => 'Proprietaire',
+            'phone' => '0600000003',
+            'role' => 'proprietaire',
+            'email' => 'youssef.proprietaire@gmail.com',
+            'password' => Hash::make('youssef123'),
+        ]);
+
+        User::create([
+            'id' => Str::uuid(),
+            'first_name' => 'Marouane',
+            'last_name' => 'Proprietaire',
+            'phone' => '0600000004',
+            'role' => 'proprietaire',
+            'email' => 'marouane.proprietaire@gmail.com',
+            'password' => Hash::make('marouane123'),
+        ]);
     }
 }
