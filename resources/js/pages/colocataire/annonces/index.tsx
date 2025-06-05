@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { EyeIcon, HeartIcon, SearchIcon, CalendarCheckIcon } from 'lucide-react';
+import { CalendarCheckIcon, EyeIcon, SearchIcon } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -81,7 +81,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Roommate annonces" />
+            <Head title="Roommate Listings" />
 
             <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
@@ -158,12 +158,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
                                                 <EyeIcon className="h-4 w-4" />
                                             </Link>
                                         </Button>
-                                        <Button 
-                                            variant="default" 
-                                            size="sm"
-                                            onClick={() => handleBookNow(annonce.id)}
-                                            className="gap-1"
-                                        >
+                                        <Button variant="default" size="sm" onClick={() => handleBookNow(annonce.id)} className="gap-1">
                                             <CalendarCheckIcon className="h-4 w-4" />
                                             Book Now
                                         </Button>
