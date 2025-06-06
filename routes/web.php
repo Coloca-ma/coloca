@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Colocataire routes
     Route::middleware(['role:colocataire'])->prefix('colocataire')->group(function () {
         Route::inertia('/dashboard', 'colocataire/dashboard')->name('colocataire.dashboard');
-        Route::resource('annonces', ColocataireAnnonceController::class);
+        Route::resource('listings', ColocataireAnnonceController::class);
     });
 
 });

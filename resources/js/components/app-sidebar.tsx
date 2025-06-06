@@ -57,7 +57,7 @@ export const AppSidebar = () => {
         },
         {
             title: 'Search Listings',
-            href: '/colocataire/annonces',
+            href: '/colocataire/listings',
             icon: Search,
         },
     ];

@@ -9,8 +9,8 @@ import { CalendarCheckIcon, EyeIcon, SearchIcon } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Listings',
-        href: '/colocataire/annonces',
+        title: 'Listings', 
+        href: '/colocataire/listings',
     },
 ];
 
@@ -68,11 +68,11 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
         const max_price = (form.elements.namedItem('max_price') as HTMLInputElement).value;
         const city = (form.elements.namedItem('city') as HTMLInputElement).value;
 
-        router.get(route('colocataire.annonces.index'), { search, min_price, max_price, city }, { preserveState: true, replace: true });
+        router.get(route('colocataire.listings.index'), { search, min_price, max_price, city }, { preserveState: true, replace: true });
     };
 
     const resetFilters = () => {
-        router.get(route('colocataire.annonces.index'), {}, { preserveState: true, replace: true });
+        router.get(route('colocataire.listings.index'), {}, { preserveState: true, replace: true });
     };
 
     const handleBookNow = (annonceId: string) => {
@@ -117,7 +117,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
                             <Card key={annonce.id} className="transition-shadow hover:shadow-lg">
                                 <CardHeader className="p-0">
                                     <div className="h-48 overflow-hidden rounded-t-lg">
-                                        <Link href={route('annonces.show', annonce.id)}>
+                                        <Link href={route('listings.show', annonce.id)}>
                                             {annonce.photos.length > 0 ? (
                                                 <img
                                                     src={`/storage/${annonce.photos[0].path}`}
@@ -133,7 +133,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
                                     </div>
                                 </CardHeader>
                                 <CardContent className="p-4">
-                                    <Link href={route('annonces.show', annonce.id)}>
+                                    <Link href={route('listings.show', annonce.id)}>
                                         <div className="flex items-start justify-between">
                                             <h3 className="text-lg font-semibold">{annonce.title}</h3>
                                             <Badge className="bg-primary text-primary-foreground">{annonce.loyer} MAD</Badge>
@@ -154,7 +154,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
                                     <div className="text-muted-foreground text-sm">Posted by {annonce.user.first_name}</div>
                                     <div className="flex gap-2">
                                         <Button variant="outline" size="icon" asChild>
-                                            <Link href={route('annonces.show', annonce.id)}>
+                                            <Link href={route('listings.show', annonce.id)}>
                                                 <EyeIcon className="h-4 w-4" />
                                             </Link>
                                         </Button>

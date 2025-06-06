@@ -61,11 +61,11 @@ export default function ColocataireAnnonceshow({ annonce, isBooked }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Listings',
-            href: route('annonces.index'),
+            href: route('listings.index'),
         },
         {
             title: annonce.title,
-            href: route('annonces.show', annonce.id),
+            href: route('listings.show', annonce.id),
         },
     ];
 
@@ -75,7 +75,7 @@ export default function ColocataireAnnonceshow({ annonce, isBooked }: Props) {
 
             <div className="space-y-6 p-6">
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={route('annonces.index')}>
+                    <Link href={route('listings.index')}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to annonces
                     </Link>

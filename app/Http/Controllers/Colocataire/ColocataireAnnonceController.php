@@ -39,7 +39,7 @@ class ColocataireAnnonceController extends Controller
         // $annonces = $query->paginate(12)->withQueryString();
         $annonces = $query->get();
 
-        return Inertia::render('colocataire/annonces/index', [
+        return Inertia::render('colocataire/listings/index', [
             'annonces' => $annonces,
             'filters' => $request->only(['search', 'city', 'min_price', 'max_price']),
         ]);
@@ -56,7 +56,7 @@ class ColocataireAnnonceController extends Controller
             'annonceEquipements.equipements'
         ]);
 
-        return Inertia::render('colocataire/annonces/show', [
+        return Inertia::render('colocataire/listings/show', [
             'annonce' => $annonce,
         ]);
     }
