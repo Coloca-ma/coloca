@@ -60,7 +60,7 @@ export default function ColocataireAnnonceshow({ annonce, isBooked }: Props) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'annonces',
+            title: 'Listings',
             href: route('annonces.index'),
         },
         {

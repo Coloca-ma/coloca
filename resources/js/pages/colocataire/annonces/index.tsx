@@ -9,7 +9,7 @@ import { CalendarCheckIcon, EyeIcon, SearchIcon } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'annonces',
+        title: 'Listings',
         href: '/colocataire/annonces',
     },
 ];
@@ -86,7 +86,7 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
             <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Roommate annonces</h1>
+                        <h1 className="text-2xl font-bold">Roommate Listings</h1>
                         <p className="text-muted-foreground text-sm">Find your perfect shared accommodation</p>
                     </div>
                 </div>

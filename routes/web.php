@@ -5,14 +5,18 @@ use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Colocataire\ColocataireAnnonceController;
 use App\Http\Controllers\Proprietaire\AnnonceController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
+
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Main dashboard that redirects to role-specific dashboards
