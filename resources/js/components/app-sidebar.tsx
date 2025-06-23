@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import type { SharedData } from '@/types'; // ajuste le chemin si nécessaire
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Home, LayoutGrid, ListChecks, Search, Users, Wrench } from 'lucide-react';
+import { BookMarked, Home, LayoutGrid, ListChecks, Search, Users, Wrench } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export const AppSidebar = () => {
@@ -47,6 +47,11 @@ export const AppSidebar = () => {
             href: '/proprietaire/annonces',
             icon: Home,
         },
+        {
+            title: 'Reservations',
+            href: '/proprietaire/reservations',
+            icon: BookMarked,
+        },
     ];
 
     const colocataireNavItems: NavItem[] = [
@@ -59,6 +64,11 @@ export const AppSidebar = () => {
             title: 'Search Listings',
             href: '/colocataire/listings',
             icon: Search,
+        },
+        {
+            title: 'Reservations',
+            href: '/colocataire/reservations',
+            icon: BookMarked,
         },
     ];
 

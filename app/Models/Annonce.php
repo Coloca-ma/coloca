@@ -23,6 +23,11 @@ class Annonce extends Model
         return $this->belongsTo(Address::class, 'address_id', "id");
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
     // Un annonce a plusieurs photos
     public function photos()
     {

@@ -13,7 +13,7 @@ class ColocataireAnnonceController extends Controller
     public function index(Request $request)
     {
         $query = Annonce::query()
-            ->with(['address.region', 'photos', 'user', 'annonceEquipements.equipements'])
+            ->with(['address.region', 'photos', 'user', 'annonceEquipements.equipements', 'reservations'])
             ->orderBy('created_at', 'desc');
 
 
@@ -23,7 +23,7 @@ class ColocataireAnnonceController extends Controller
         }
 
         if ($request->has('city') && $request->city) {
-            $query->whereHas('address', function($q) use ($request) {
+            $query->whereHas('address', function ($q) use ($request) {
                 $q->where('city', 'like', '%' . $request->city . '%');
             });
         }
@@ -42,17 +42,19 @@ class ColocataireAnnonceController extends Controller
         return Inertia::render('colocataire/listings/index', [
             'annonces' => $annonces,
             'filters' => $request->only(['search', 'city', 'min_price', 'max_price']),
+            'flash' => ["success", session('success')]
         ]);
     }
 
-    public function show(Annonce $annonce)
+    public function show(string $id)
     {
-        $annonce = $annonce->load([
-            'address.region', 
-            'photos', 
+        $annonce = Annonce::findOrFail($id);
+        $annonce->load([
+            'address.region',
+            'photos',
             'user',
-            'annoncePreferenceValues.preference', 
-            'annoncePreferenceValues.preferenceValue.preference', 
+            'annoncePreferenceValues.preference',
+            'annoncePreferenceValues.preferenceValue.preference',
             'annonceEquipements.equipements'
         ]);
 

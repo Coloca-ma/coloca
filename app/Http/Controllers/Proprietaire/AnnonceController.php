@@ -62,7 +62,7 @@ class AnnonceController extends Controller
         ]);
 
         $annonce = Annonce::create([
-            'title' => $validated['title'],
+            'title' => now(),
             'description' => $validated['description'],
             'loyer' => $validated['loyer'],
             'address_id' => $address->id,

@@ -6,10 +6,11 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { CalendarCheckIcon, EyeIcon, SearchIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Listings', 
+        title: 'Listings',
         href: '/colocataire/listings',
     },
 ];
@@ -29,6 +30,12 @@ interface User {
     last_name: string;
 }
 
+interface Reservation {
+    status: string;
+    start_date: string;
+    end_date: string;
+}
+
 interface Photo {
     path: string;
 }
@@ -42,6 +49,7 @@ interface Annonce {
     user: User;
     photos: Photo[];
     created_at: string;
+    reservations: Reservation[];
     annonceEquipements: {
         equipements: {
             name: string;
@@ -57,9 +65,24 @@ interface Props {
         max_price?: string;
         city?: string;
     };
+    flash: Array<string | null>;
 }
 
-export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
+export default function ColocataireAnnonceIndex({ annonces, filters, flash }: Props) {
+    const [message, setMessage] = useState(flash[1]);
+
+    useEffect(() => {
+        if (flash[1]) {
+            const timeout = setTimeout(() => {
+                setMessage(null);
+            }, 1500);
+
+            return () => clearTimeout(timeout); // cleanup
+        }
+    }, [flash[1]]);
+
+    useEffect(() => console.log(annonces), []);
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -75,15 +98,16 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
         router.get(route('colocataire.listings.index'), {}, { preserveState: true, replace: true });
     };
 
-    const handleBookNow = (annonceId: string) => {
-        router.post(route('colocataire.bookings.store'), { annonce_id: annonceId });
-    };
+    // const handleBookNow = (annonceId: string) => {
+    //     router.get(route('colocataire.reservations.create'), { annonce_id: annonceId });
+    // };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Roommate Listings" />
 
             <div className="space-y-6 p-6">
+                {message && <div className="rounded-xl bg-green-100 p-6 px-4 py-2 text-green-500">{message}</div>}
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold">Roommate Listings</h1>
@@ -158,10 +182,12 @@ export default function ColocataireAnnonceIndex({ annonces, filters }: Props) {
                                                 <EyeIcon className="h-4 w-4" />
                                             </Link>
                                         </Button>
-                                        <Button variant="default" size="sm" onClick={() => handleBookNow(annonce.id)} className="gap-1">
-                                            <CalendarCheckIcon className="h-4 w-4" />
-                                            Book Now
-                                        </Button>
+                                        <Link href={route('reservations.create', { id: annonce.id })}>
+                                            <Button variant="default" size="sm" className="gap-1">
+                                                <CalendarCheckIcon className="h-4 w-4" />
+                                                Book Now
+                                            </Button>
+                                        </Link>
                                     </div>
                                 </CardFooter>
                             </Card>
