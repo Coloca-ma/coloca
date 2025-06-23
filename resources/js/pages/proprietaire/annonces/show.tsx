@@ -64,98 +64,111 @@ interface Annonce {
 export default function Show({ annonce }: { annonce: Annonce }) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Annonces', href: route('annonces.index') },
-        { title: 'Annonce Details', href: route('annonces.show', { id: annonce.id }) },
+        { title: annonce.title, href: route('annonces.show', { id: annonce.id }) },
     ];
 
-    const [emblaRef] = useEmblaCarousel();
-    const photos = annonce.photos;
-    // console.log(annonce);
+    const [emblaRef] = useEmblaCarousel({ loop: true });
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <div className="mx-auto w-full space-y-8 px-4 py-8 xl:max-w-6xl">
-                {/* Carousel */}
-                <div className="overflow-hidden rounded-xl" ref={emblaRef}>
+            <div className="mx-auto w-full space-y-8 px-4 py-8 xl:max-w-7xl">
+                {/* Enhanced Image Carousel */}
+                <div className="overflow-hidden rounded-xl shadow-md" ref={emblaRef}>
                     <div className="flex">
-                        {photos.length > 0 ? (
-                            photos.map((photo, index) => (
-                                <div className="h-[400px] w-full flex-shrink-0 bg-gray-200" key={index}>
-                                    <img src={`/storage/${photo.path}`} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
+                        {annonce.photos.length > 0 ? (
+                            annonce.photos.map((photo, index) => (
+                                <div className="h-[55vh] min-h-[400px] w-full flex-shrink-0" key={index}>
+                                    <img 
+                                        src={`/storage/${photo.path}`} 
+                                        alt={`Photo ${index + 1}`} 
+                                        className="h-full w-full object-cover object-center"
+                                        loading="lazy"
+                                    />
                                 </div>
                             ))
                         ) : (
-                            <div className="flex h-[400px] w-full items-center justify-between bg-gray-200 text-center text-3xl font-bold text-black">
-                                <p className="w-full">No images to preview</p>
+                            <div className="flex h-[55vh] min-h-[400px] w-full items-center justify-center bg-gray-100">
+                                <p className="text-xl text-gray-500">Aucune image disponible</p>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Content */}
-                <div>
-                    <h1 className="text-3xl font-bold">{annonce.title}</h1>
+                {/* Property Header */}
+                <div className="space-y-2">
+                    <h1 className="text-3xl font-bold text-gray-900">{annonce.title}</h1>
+                    <div className="flex items-center gap-2 text-gray-600">
+                        <MapPin className="h-5 w-5" />
+                        <span>{annonce.address.city}, {annonce.address.region.name}</span>
+                    </div>
                 </div>
 
+                {/* Main Content Grid */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    {/* Description */}
-                    <div className="rounded-lg border bg-white py-6 pl-6 lg:col-span-2">
-                        <div className="max-h-52 overflow-y-auto">
-                            <h2 className="mb-3 text-lg font-semibold text-gray-900">Description</h2>
-                            <p className="leading-relaxed whitespace-pre-line text-gray-700">{annonce.description}</p>
+                    {/* Left Column */}
+                    <div className="space-y-6 lg:col-span-2">
+                        {/* Description Card */}
+                        <div className="rounded-xl bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-semibold text-gray-900">Description</h2>
+                            <p className="whitespace-pre-line text-gray-700 leading-relaxed">
+                                {annonce.description}
+                            </p>
+                        </div>
+
+                        {/* Preferences Card */}
+                        <div className="rounded-xl bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-semibold text-gray-900">Préférences</h2>
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                {annonce.annonce_preference_values.map((apv, idx) => (
+                                    <div key={idx} className="flex justify-between py-2">
+                                        <span className="font-medium text-gray-700">{apv.preference.name}</span>
+                                        <span className="text-gray-600">{apv.preference_value.value}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Rent and Address */}
-                    <div className="space-y-4 rounded-lg border bg-white py-6 pl-6">
-                        <div className="max-h-52 overflow-y-auto">
-                            <div>
-                                <h2 className="mb-1 text-lg font-semibold text-gray-900">Loyer mensuel</h2>
-                                <p className="text-3xl font-bold text-gray-900">{annonce.loyer} MAD</p>
-                            </div>
-                            <hr className="my-3" />
-                            <div>
-                                <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-gray-700">
-                                    <MapPin />
-                                    Adresse
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    {annonce.address.street}
-                                    <br />
-                                    {annonce.address.postal_code} {annonce.address.city}
-                                    <br />
-                                    {annonce.address.region.name}
-                                </p>
+                    {/* Right Column */}
+                    <div className="space-y-6">
+                        {/* Pricing Card */}
+                        <div className="rounded-xl bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-semibold text-gray-900">Détails Financiers</h2>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-gray-700">Loyer mensuel</span>
+                                    <span className="text-2xl font-bold text-gray-900">{annonce.loyer} MAD</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {/* Preferences */}
-                    <div className="rounded-lg border bg-white p-6 text-black lg:col-span-2">
-                        <div className="max-h-52 overflow-y-auto">
-                            <h3 className="text-2xl font-bold">Annonce preferences:</h3>
-                            {annonce.annonce_preference_values.map((apv, idx) => {
-                                return (
-                                    <div key={idx}>
-                                        <p className="my-1 flex items-center justify-between">
-                                            <span className="font-bold">{apv.preference.name}:</span> <span>{apv.preference_value.value}</span>
+
+                        {/* Address Card */}
+                        <div className="rounded-xl bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-semibold text-gray-900">Adresse</h2>
+                            <div className="space-y-2">
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <p className="text-gray-900">{annonce.address.street}</p>
+                                        <p className="text-gray-600">
+                                            {annonce.address.postal_code} {annonce.address.city}
                                         </p>
+                                        <p className="text-gray-600">{annonce.address.region.name}</p>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {/* Rent and Address */}
-                    <div className="space-y-4 rounded-lg border bg-white p-6 text-black">
-                        <div className="max-h-52 overflow-y-auto">
-                            <h3 className="text-2xl font-bold">Annonce equipements:</h3>
-                            {annonce.annonce_equipements.map((equip, idx) => {
-                                return (
-                                    <div key={idx}>
-                                        <p className="my-1 flex items-center justify-between">
-                                            <span className="font-bold">{equip.equipements.name}</span>
-                                        </p>
-                                    </div>
-                                );
-                            })}
+
+                        {/* Equipment Card */}
+                        <div className="rounded-xl bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-semibold text-gray-900">Équipements</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {annonce.annonce_equipements.map((equip, idx) => (
+                                    <span key={idx} className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
+                                        {equip.equipements.name}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -22,20 +22,37 @@ class AnnonceController extends Controller
 {
     public function index()
     {
+        // // return Inertia::render('proprietaire/annonces/index', [
+        // //     'annonces' => Annonce::with('address')->get(),
+        // //     'addresses' => Address::all(),
+        // //     'success' => session('success'),
+        // // ]);
+
+        // // Récupérer uniquement les annonces de l'utilisateur connecté
+        // $annonces = Annonce::where('user_id', Auth::id())
+        //     ->get();
+
         // return Inertia::render('proprietaire/annonces/index', [
-        //     'annonces' => Annonce::with('address')->get(),
+        //     'annonces' => $annonces,
         //     'addresses' => Address::all(),
         //     'success' => session('success'),
         // ]);
+        
+        $query = Annonce::where('user_id', Auth::id());
 
-        // Récupérer uniquement les annonces de l'utilisateur connecté
-        $annonces = Annonce::where('user_id', Auth::id())
-            ->get();
+        // Add search functionality
+        if (request()->has('search') && request()->input('search')) {
+            $search = request()->input('search');
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        $annonces = $query->get();
 
         return Inertia::render('proprietaire/annonces/index', [
             'annonces' => $annonces,
             'addresses' => Address::all(),
             'success' => session('success'),
+            'filters' => request()->only(['search']),
         ]);
     }
 
@@ -62,7 +79,7 @@ class AnnonceController extends Controller
         ]);
 
         $annonce = Annonce::create([
-            'title' => now(),
+            'title' => $validated['title'],
             'description' => $validated['description'],
             'loyer' => $validated['loyer'],
             'address_id' => $address->id,
